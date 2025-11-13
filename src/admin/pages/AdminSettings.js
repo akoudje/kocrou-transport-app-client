@@ -1,5 +1,5 @@
 // src/admin/pages/AdminSettings.js
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { motion } from "framer-motion";
 import {
   Save,
@@ -106,7 +106,7 @@ const AdminSettings = () => {
     }
   };
 
-  // ✅ Sauvegarde des paramètres
+
   // ✅ Sauvegarde des paramètres
   const handleSubmit = async (e) => {
   e.preventDefault();
@@ -114,10 +114,7 @@ const AdminSettings = () => {
     setLoading(true);
     const { data } = await api.put("/settings", settings, {
       headers: { Authorization: `Bearer ${token}` },
-    });
-
-    updateSettings(data.data); // mise à jour instantanée du contexte
-    await fetchSettings(); // 👈 recharge complète depuis le backend
+    });    
 
     Swal.fire({
       icon: "success",
@@ -126,6 +123,11 @@ const AdminSettings = () => {
       timer: 2000,
       showConfirmButton: false,
     });
+
+    // 🔁 Forcer le rafraîchissement du contexte et des couleurs
+    updateSettings(data.data); // mise à jour instantanée du contexte
+    await fetchSettings(); // 👈 recharge complète depuis le backend
+
   } catch (err) {
     console.error("Erreur sauvegarde paramètres :", err);
     Swal.fire("Erreur", "Impossible d’enregistrer les paramètres.", "error");

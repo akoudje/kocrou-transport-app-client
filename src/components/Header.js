@@ -60,7 +60,7 @@ const Header = () => {
               className="text-xl font-bold tracking-tight transition-colors"
               style={{ color: primaryColor }}
             >
-              {settings?.compagnieName || "Kocrou Transport"}
+              {settings?.compagnieName}
             </h2>
           </Link>
 

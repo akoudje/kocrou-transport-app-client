@@ -1,22 +1,22 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-//import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import App from "./App";
+import { AuthProvider } from "./context/AuthContext";
+import { SettingsProvider } from "./context/SettingsContext";
 
+// ✅ C’est ici qu’on englobe toute l’application
+const root = ReactDOM.createRoot(document.getElementById("root"));
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <SettingsProvider>
+      <AuthProvider>
+        <App />
+      </AuthProvider>
+    </SettingsProvider>
   </React.StrictMode>
 );
-
-/* if (typeof window !== "undefined" && "ResizeObserver" in window) {
-  const ro = new ResizeObserver(() => {});
-  ro.observe(document.body);
-  ro.disconnect();
-} */
 
 // Patch pour éviter le warning ResizeObserver dans Chrome
 if (typeof window !== "undefined" && "ResizeObserver" in window) {
@@ -35,8 +35,3 @@ if (typeof window !== "undefined" && "ResizeObserver" in window) {
 }
 
 
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-//reportWebVitals();

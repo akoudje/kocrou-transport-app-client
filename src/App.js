@@ -1,8 +1,5 @@
 import React from "react";
-import ReactDOM from "react-dom/client";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { AuthProvider } from "./context/AuthContext";
-import { SettingsProvider } from "./context/SettingsContext";
 
 // 🌍 Pages publiques
 import LandingPage from "./pages/LandingPage";
@@ -97,13 +94,5 @@ const App = () => {
   );
 };
 
-// ✅ Fournisseurs globaux autour de l’application
-ReactDOM.createRoot(document.getElementById("root")).render(
-  <SettingsProvider>
-    <AuthProvider>
-      <App />
-    </AuthProvider>
-  </SettingsProvider>
-);
-
 export default App;
+
