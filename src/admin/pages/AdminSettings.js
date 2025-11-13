@@ -91,6 +91,7 @@ const AdminSettings = () => {
       setSettings(updated);
       setPreviewLogo(url);
       updateSettings(updated); // 👈 mise à jour du contexte
+      await fetchSettings();
 
       Swal.fire(
         "✅ Logo mis à jour",
@@ -108,30 +109,30 @@ const AdminSettings = () => {
   // ✅ Sauvegarde des paramètres
   // ✅ Sauvegarde des paramètres
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      setLoading(true);
-      const { data } = await api.put("/settings", settings, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+  e.preventDefault();
+  try {
+    setLoading(true);
+    const { data } = await api.put("/settings", settings, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
 
-      // ✅ Mise à jour du contexte global immédiatement
-      updateSettings(data.data);
+    updateSettings(data.data); // mise à jour instantanée du contexte
+    await fetchSettings(); // 👈 recharge complète depuis le backend
 
-      Swal.fire({
-        icon: "success",
-        title: "Paramètres sauvegardés ✅",
-        text: "Les paramètres système ont été mis à jour avec succès.",
-        timer: 2000,
-        showConfirmButton: false,
-      });
-    } catch (err) {
-      console.error("Erreur sauvegarde paramètres :", err);
-      Swal.fire("Erreur", "Impossible d’enregistrer les paramètres.", "error");
-    } finally {
-      setLoading(false);
-    }
-  };
+    Swal.fire({
+      icon: "success",
+      title: "Paramètres sauvegardés ✅",
+      text: "Les paramètres ont été appliqués immédiatement.",
+      timer: 2000,
+      showConfirmButton: false,
+    });
+  } catch (err) {
+    console.error("Erreur sauvegarde paramètres :", err);
+    Swal.fire("Erreur", "Impossible d’enregistrer les paramètres.", "error");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="p-6 space-y-8">
