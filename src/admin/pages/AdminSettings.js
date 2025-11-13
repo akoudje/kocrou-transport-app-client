@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import Swal from "sweetalert2";
 import api from "../../utils/api";
+import { SettingsContext } from "../../context/SettingsContext"; // 👈 Ajout
 
 const AdminSettings = () => {
   const [settings, setSettings] = useState({
@@ -23,6 +24,8 @@ const AdminSettings = () => {
   const [previewLogo, setPreviewLogo] = useState("");
   const [loading, setLoading] = useState(false);
   const token = localStorage.getItem("token");
+
+  const { updateSettings } = useContext(SettingsContext); // 👈 Accès à la fonction du contexte
 
   // ✅ Charger les paramètres existants
   const fetchSettings = async () => {
@@ -43,7 +46,11 @@ const AdminSettings = () => {
       setPreviewLogo(s.logo || "");
     } catch (err) {
       console.error("Erreur chargement paramètres :", err);
-      Swal.fire("Erreur", "Impossible de charger les paramètres système.", "error");
+      Swal.fire(
+        "Erreur",
+        "Impossible de charger les paramètres système.",
+        "error"
+      );
     } finally {
       setLoading(false);
     }
@@ -59,6 +66,7 @@ const AdminSettings = () => {
     setSettings((prev) => ({ ...prev, [name]: value }));
   };
 
+  // ✅ Upload du logo
   // ✅ Upload du logo
   const handleLogoUpload = async (e) => {
     const file = e.target.files[0];
@@ -79,9 +87,16 @@ const AdminSettings = () => {
       const url = data?.url || data?.logo || "";
       if (!url) throw new Error("URL de logo introuvable");
 
-      setSettings((prev) => ({ ...prev, logo: url }));
+      const updated = { ...settings, logo: url };
+      setSettings(updated);
       setPreviewLogo(url);
-      Swal.fire("✅ Logo mis à jour", "Le logo a été téléchargé avec succès.", "success");
+      updateSettings(updated); // 👈 mise à jour du contexte
+
+      Swal.fire(
+        "✅ Logo mis à jour",
+        "Le logo a été téléchargé avec succès.",
+        "success"
+      );
     } catch (err) {
       console.error("Erreur upload logo :", err);
       Swal.fire("Erreur", "Échec du téléchargement du logo.", "error");
@@ -91,13 +106,17 @@ const AdminSettings = () => {
   };
 
   // ✅ Sauvegarde des paramètres
+  // ✅ Sauvegarde des paramètres
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       setLoading(true);
-      await api.put("/settings", settings, {
+      const { data } = await api.put("/settings", settings, {
         headers: { Authorization: `Bearer ${token}` },
       });
+
+      // ✅ Mise à jour du contexte global immédiatement
+      updateSettings(data.data);
 
       Swal.fire({
         icon: "success",
@@ -139,7 +158,9 @@ const AdminSettings = () => {
         <div className="grid md:grid-cols-2 gap-6">
           {/* Nom compagnie */}
           <div>
-            <label className="block text-sm font-medium mb-1">Nom de la compagnie</label>
+            <label className="block text-sm font-medium mb-1">
+              Nom de la compagnie
+            </label>
             <input
               type="text"
               name="compagnieName"
@@ -151,7 +172,9 @@ const AdminSettings = () => {
 
           {/* Tarif */}
           <div>
-            <label className="block text-sm font-medium mb-1">Tarif par km (FCFA)</label>
+            <label className="block text-sm font-medium mb-1">
+              Tarif par km (FCFA)
+            </label>
             <input
               type="number"
               name="tarifParKm"
@@ -163,7 +186,9 @@ const AdminSettings = () => {
 
           {/* Nombre de places */}
           <div>
-            <label className="block text-sm font-medium mb-1">Places par défaut</label>
+            <label className="block text-sm font-medium mb-1">
+              Places par défaut
+            </label>
             <input
               type="number"
               name="nombrePlacesDefaut"
@@ -175,7 +200,9 @@ const AdminSettings = () => {
 
           {/* Couleur */}
           <div>
-            <label className="block text-sm font-medium mb-1">Couleur principale</label>
+            <label className="block text-sm font-medium mb-1">
+              Couleur principale
+            </label>
             <div className="flex items-center gap-3">
               <input
                 type="color"
@@ -184,14 +211,18 @@ const AdminSettings = () => {
                 onChange={handleChange}
                 className="w-12 h-10 border rounded"
               />
-              <span className="text-sm text-gray-500">{settings.couleurPrincipale}</span>
+              <span className="text-sm text-gray-500">
+                {settings.couleurPrincipale}
+              </span>
             </div>
           </div>
         </div>
 
         {/* Logo */}
         <div className="border-t border-gray-200 dark:border-gray-700 pt-5">
-          <label className="block text-sm font-medium mb-2">Logo de la compagnie</label>
+          <label className="block text-sm font-medium mb-2">
+            Logo de la compagnie
+          </label>
           <div className="flex flex-col sm:flex-row items-center gap-4">
             {previewLogo ? (
               <img
@@ -206,7 +237,12 @@ const AdminSettings = () => {
             )}
             <label className="flex items-center gap-2 cursor-pointer bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition">
               <Upload className="w-4 h-4" /> Importer un logo
-              <input type="file" accept="image/*" className="hidden" onChange={handleLogoUpload} />
+              <input
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={handleLogoUpload}
+              />
             </label>
           </div>
         </div>
