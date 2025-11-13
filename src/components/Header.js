@@ -31,7 +31,7 @@ const Header = () => {
           <Link to="/" className="flex items-center gap-3 text-primary">
             <Bus className="w-7 h-7" />
             <h2 className="text-xl font-bold tracking-tight text-text-light dark:text-text-dark">
-              Kocrou Transport
+              Kocrou Transport & Frères
             </h2>
           </Link>
 
