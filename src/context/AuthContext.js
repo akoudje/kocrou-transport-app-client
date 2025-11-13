@@ -11,11 +11,13 @@ export const AuthProvider = ({ children }) => {
     return saved ? JSON.parse(saved) : null;
   });
   const [token, setToken] = useState(() => localStorage.getItem("token"));
-  const [refreshToken, setRefreshToken] = useState(() => localStorage.getItem("refreshToken"));
+  const [refreshToken, setRefreshToken] = useState(() =>
+    localStorage.getItem("refreshToken")
+  );
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // ✅ Synchronisation locale
+  // ✅ Sync localStorage avec l’état
   useEffect(() => {
     if (user && token) {
       localStorage.setItem("user", JSON.stringify(user));
@@ -28,7 +30,7 @@ export const AuthProvider = ({ children }) => {
     }
   }, [user, token, refreshToken]);
 
-  // ✅ Appliquer automatiquement le token sur Axios
+  // ✅ Applique le token à Axios
   useEffect(() => {
     if (token) {
       api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
@@ -37,7 +39,46 @@ export const AuthProvider = ({ children }) => {
     }
   }, [token]);
 
-  // ✅ Connexion utilisateur
+  /* =========================================================
+     🆕 INSCRIPTION UTILISATEUR
+  ========================================================= */
+  const register = useCallback(async (name, email, password) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const { data } = await api.post("/auth/register", { name, email, password });
+
+      Swal.fire({
+        icon: "success",
+        title: "Compte créé 🎉",
+        text: "Votre compte a été créé avec succès. Vous pouvez maintenant vous connecter.",
+        confirmButtonColor: "#16a34a",
+      });
+
+      setLoading(false);
+      return true;
+    } catch (err) {
+      console.error("❌ Erreur d'inscription :", err);
+      const msg =
+        err.response?.data?.message ||
+        "Impossible de créer le compte. Réessayez plus tard.";
+
+      setError(msg);
+      Swal.fire({
+        icon: "error",
+        title: "Erreur d'inscription",
+        text: msg,
+        confirmButtonColor: "#dc2626",
+      });
+
+      setLoading(false);
+      return false;
+    }
+  }, []);
+
+  /* =========================================================
+     🔐 CONNEXION UTILISATEUR
+  ========================================================= */
   const login = useCallback(async (email, password) => {
     setLoading(true);
     setError(null);
@@ -59,11 +100,15 @@ export const AuthProvider = ({ children }) => {
       return true;
     } catch (err) {
       console.error("❌ Erreur de connexion :", err);
-      setError(err.response?.data?.message || "Erreur de connexion.");
+      const msg =
+        err.response?.data?.message ||
+        "Identifiants incorrects ou serveur indisponible.";
+
+      setError(msg);
       Swal.fire({
         icon: "error",
         title: "Échec de la connexion",
-        text: "Identifiants incorrects ou serveur indisponible.",
+        text: msg,
       });
       return false;
     } finally {
@@ -71,7 +116,9 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
-  // ✅ Déconnexion propre
+  /* =========================================================
+     🚪 DÉCONNEXION
+  ========================================================= */
   const logout = useCallback(() => {
     setUser(null);
     setToken(null);
@@ -85,7 +132,9 @@ export const AuthProvider = ({ children }) => {
     });
   }, []);
 
-  // ✅ Rafraîchissement automatique du token
+  /* =========================================================
+     ♻️ RAFRAÎCHISSEMENT DU TOKEN
+  ========================================================= */
   const refreshAccessToken = useCallback(async () => {
     if (!refreshToken) return;
     try {
@@ -99,7 +148,6 @@ export const AuthProvider = ({ children }) => {
     }
   }, [refreshToken, logout]);
 
-  // 🔄 Vérifie périodiquement la validité du token
   useEffect(() => {
     const interval = setInterval(() => {
       refreshAccessToken();
@@ -115,6 +163,7 @@ export const AuthProvider = ({ children }) => {
         refreshToken,
         loading,
         error,
+        register, // ✅ ajouté
         login,
         logout,
         isAuthenticated: !!user,
