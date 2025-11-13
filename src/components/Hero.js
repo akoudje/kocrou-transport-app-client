@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+// src/components/Hero.js
+import React, { useState, useContext } from "react";
 import { MapPin, Calendar, Users, Map } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-//import { motion } from "framer-motion";
+import { SettingsContext } from "../context/SettingsContext";
 
 const Hero = () => {
   const navigate = useNavigate();
+  const { settings } = useContext(SettingsContext);
+
   const [form, setForm] = useState({
     depart: "",
     arrivee: "",
@@ -12,23 +15,23 @@ const Hero = () => {
     passagers: "1",
   });
 
-  const handleChange = (e) => {
+  const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
-  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    // Redirection avec paramètres GET
     const query = new URLSearchParams(form).toString();
     navigate(`/recherche?${query}`);
   };
+
+  const primaryColor = settings?.couleurPrincipale || "#2563eb";
 
   return (
     <section
       id="hero"
       className="relative flex min-h-[560px] items-center justify-center py-16 text-center overflow-hidden"
     >
+      {/* 🔹 Image de fond */}
       <div
         className="absolute inset-0 bg-cover bg-center"
         style={{
@@ -38,20 +41,36 @@ const Hero = () => {
       ></div>
 
       <div className="relative z-10 mx-auto w-full max-w-4xl px-4">
-        <h1 className="text-4xl md:text-6xl font-black text-white">
-          Voyagez simplement, réservez maintenant
+        {/* 🔹 Logo dynamique */}
+        {settings?.logo && (
+          <img
+            src={settings.logo}
+            alt="Logo"
+            className="mx-auto mb-6 w-24 h-24 object-contain rounded-md"
+          />
+        )}
+
+        {/* 🔹 Titre principal */}
+        <h1 className="text-4xl md:text-6xl font-black text-white leading-tight drop-shadow-lg">
+          Voyagez simplement, <br />
+          <span style={{ color: primaryColor }}>réservez maintenant</span>
         </h1>
+
         <p className="mx-auto mt-4 max-w-2xl text-gray-200 md:text-lg">
           Trouvez les meilleurs trajets en bus pour votre prochaine aventure.
         </p>
 
+        {/* 🔹 Formulaire de recherche */}
         <form
           onSubmit={handleSubmit}
-          className="mt-10 rounded-xl bg-background-light dark:bg-card-dark p-4 sm:p-6 shadow-2xl"
+          className="mt-10 rounded-xl bg-white/90 dark:bg-card-dark/90 backdrop-blur-md p-4 sm:p-6 shadow-2xl"
         >
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5 lg:items-end">
+            {/* Champ départ */}
             <label className="flex flex-col text-left">
-              <p className="pb-2 text-sm font-medium">Départ</p>
+              <p className="pb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                Départ
+              </p>
               <div className="relative">
                 <Map className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                 <input
@@ -65,8 +84,11 @@ const Hero = () => {
               </div>
             </label>
 
+            {/* Champ arrivée */}
             <label className="flex flex-col text-left">
-              <p className="pb-2 text-sm font-medium">Destination</p>
+              <p className="pb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                Destination
+              </p>
               <div className="relative">
                 <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                 <input
@@ -80,8 +102,11 @@ const Hero = () => {
               </div>
             </label>
 
+            {/* Champ date */}
             <label className="flex flex-col text-left">
-              <p className="pb-2 text-sm font-medium">Date de départ</p>
+              <p className="pb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                Date de départ
+              </p>
               <div className="relative">
                 <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                 <input
@@ -94,8 +119,11 @@ const Hero = () => {
               </div>
             </label>
 
+            {/* Champ passagers */}
             <label className="flex flex-col text-left">
-              <p className="pb-2 text-sm font-medium">Passagers</p>
+              <p className="pb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                Passagers
+              </p>
               <div className="relative">
                 <Users className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                 <input
@@ -109,9 +137,11 @@ const Hero = () => {
               </div>
             </label>
 
+            {/* Bouton principal dynamique */}
             <button
               type="submit"
-              className="h-14 px-5 bg-primary text-white font-bold rounded-lg hover:bg-primary/90 transition"
+              className="h-14 px-6 text-white font-semibold rounded-lg shadow-md transition hover:opacity-90"
+              style={{ backgroundColor: primaryColor }}
             >
               Rechercher
             </button>
@@ -123,7 +153,3 @@ const Hero = () => {
 };
 
 export default Hero;
-
-
-
-

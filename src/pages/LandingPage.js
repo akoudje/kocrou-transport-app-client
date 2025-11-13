@@ -7,7 +7,7 @@ import Footer from "../components/Footer";
 
 const LandingPage = () => {
   return (
-    <div className="bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark font-display">
+/*     <div className="bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark font-display">
       <Header />
       <main>
         <Hero />
@@ -15,6 +15,18 @@ const LandingPage = () => {
         <WhyChooseUs />
       </main>
       <Footer />
+    </div> */
+
+ <div className="min-h-screen flex flex-col bg-background-light dark:bg-background-dark transition-colors duration-300">
+      <Header />
+      <main className="flex-grow">
+        <Hero />
+        <Destinations />
+        <WhyChooseUs />
+      </main>
+      <footer className="text-center py-6 text-gray-500 dark:text-gray-400 text-sm border-t border-gray-200 dark:border-gray-700">
+        © {new Date().getFullYear()} Kocrou Transport. Tous droits réservés.
+      </footer>
     </div>
   );
 };
