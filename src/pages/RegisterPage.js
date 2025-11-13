@@ -15,10 +15,9 @@ const RegisterPage = () => {
     password: "",
   });
 
-  // 🧩 Gestion des champs du formulaire
-  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+  const handleChange = (e) =>
+    setForm({ ...form, [e.target.name]: e.target.value });
 
-  // 🚀 Soumission du formulaire
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -51,13 +50,11 @@ const RegisterPage = () => {
         transition={{ duration: 0.5 }}
         className="bg-card-light dark:bg-card-dark p-8 rounded-xl shadow-lg w-full max-w-md"
       >
-        {/* 🔹 En-tête */}
         <div className="flex items-center justify-center gap-2 mb-6 text-primary">
           <UserPlus className="w-6 h-6" />
           <h2 className="text-2xl font-bold">Créer un compte</h2>
         </div>
 
-        {/* 🔹 Formulaire */}
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
             <label className="text-sm font-medium">Nom complet</label>
@@ -68,9 +65,7 @@ const RegisterPage = () => {
               onChange={handleChange}
               required
               placeholder="Ex: Junior Akoudjé"
-              className="w-full mt-1 p-3 rounded-lg border border-gray-300 dark:border-gray-600 
-                         bg-subtle-light dark:bg-subtle-dark text-gray-800 dark:text-gray-100 
-                         focus:ring-2 focus:ring-primary outline-none"
+              className="w-full mt-1 p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-subtle-light dark:bg-subtle-dark text-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-primary outline-none"
             />
           </div>
 
@@ -83,9 +78,7 @@ const RegisterPage = () => {
               onChange={handleChange}
               required
               placeholder="exemple@mail.com"
-              className="w-full mt-1 p-3 rounded-lg border border-gray-300 dark:border-gray-600 
-                         bg-subtle-light dark:bg-subtle-dark text-gray-800 dark:text-gray-100 
-                         focus:ring-2 focus:ring-primary outline-none"
+              className="w-full mt-1 p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-subtle-light dark:bg-subtle-dark text-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-primary outline-none"
             />
           </div>
 
@@ -99,25 +92,20 @@ const RegisterPage = () => {
               required
               minLength={6}
               placeholder="••••••••"
-              className="w-full mt-1 p-3 rounded-lg border border-gray-300 dark:border-gray-600 
-                         bg-subtle-light dark:bg-subtle-dark text-gray-800 dark:text-gray-100 
-                         focus:ring-2 focus:ring-primary outline-none"
+              className="w-full mt-1 p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-subtle-light dark:bg-subtle-dark text-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-primary outline-none"
             />
           </div>
 
-          {/* Message d’erreur éventuel du contexte */}
           {error && (
             <p className="text-center text-sm mt-3 text-red-500 bg-red-100 dark:bg-red-900/20 p-2 rounded-lg">
               {error}
             </p>
           )}
 
-          {/* 🔘 Bouton de création */}
           <button
             type="submit"
             disabled={loading}
-            className="w-full flex justify-center items-center gap-2 py-3 rounded-lg font-semibold 
-                       text-white bg-primary hover:bg-primary/90 transition"
+            className="w-full flex justify-center items-center gap-2 py-3 rounded-lg font-semibold text-white bg-primary hover:bg-primary/90 transition"
           >
             {loading ? (
               <>
@@ -129,7 +117,6 @@ const RegisterPage = () => {
           </button>
         </form>
 
-        {/* 🔗 Lien vers connexion */}
         <p className="text-center text-sm text-gray-500 mt-6">
           Déjà inscrit ?{" "}
           <span
@@ -140,7 +127,6 @@ const RegisterPage = () => {
           </span>
         </p>
 
-        {/* 🔸 Footer */}
         <p className="text-center text-xs text-gray-400 dark:text-gray-500 mt-6">
           © {new Date().getFullYear()} Kocrou Transport. Tous droits réservés.
         </p>
@@ -150,3 +136,4 @@ const RegisterPage = () => {
 };
 
 export default RegisterPage;
+
