@@ -197,6 +197,11 @@ const Header = () => {
               )}
               <a href="#destinations" className="hover:opacity-80">Destinations</a>
               <a href="#contact" className="hover:opacity-80">Contact</a>
+              {isAdmin && (
+                <Link to="/admin" className="hover:opacity-80">
+                  Dashboard
+                </Link>
+              )}
 
               {!user ? (
                 <button
