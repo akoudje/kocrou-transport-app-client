@@ -15,7 +15,7 @@ import {
 import { Users, Bus, DollarSign, Calendar, Clock, Wifi } from "lucide-react";
 import { message, Tag } from "antd";
 import api from "../../utils/api";
-import socket from "../../utils/socket";
+import { io } from "socket.io-client";
 
 const AdminDashboard = () => {
   const [stats, setStats] = useState({
@@ -120,11 +120,14 @@ const AdminDashboard = () => {
   // ⚡ Connexion WebSocket sécurisée
   // ======================================================
   useEffect(() => {
-    if (!socket) return;
+    const socket = io(api.defaults.baseURL, {
+      transports: ["websocket"],
+      auth: { token }, // ✅ on envoie le JWT au serveur
+    });
 
     socket.on("connect", () => {
       setSocketConnected(true);
-      socket.emit("admin_join");
+      socket.emit("admin_join", { email: "dashboard@admin" });
     });
 
     socket.on("disconnect", () => setSocketConnected(false));
@@ -150,13 +153,10 @@ const AdminDashboard = () => {
     refreshIntervalRef.current = setInterval(fetchDashboardData, 60000);
 
     return () => {
-      socket.off("connect");
-      socket.off("disconnect");
-      socket.off("reservation_created");
-      socket.off("reservation_deleted");
+      socket.disconnect();
       if (refreshIntervalRef.current) clearInterval(refreshIntervalRef.current);
     };
-  }, [fetchDashboardData]);
+  }, [fetchDashboardData, token]);
 
   // ======================================================
   // ⏱ Dernière mise à jour
@@ -169,9 +169,6 @@ const AdminDashboard = () => {
     return `il y a ${Math.floor(diff / 3600)} h`;
   };
 
-  // ======================================================
-  // 🎨 Affichage principal
-  // ======================================================
   if (loading)
     return (
       <div className="flex items-center justify-center min-h-screen text-gray-500">
@@ -211,12 +208,8 @@ const AdminDashboard = () => {
   );
 };
 
-// ======================================================
-// 🧩 COMPOSANTS SECONDAIRES
-// ======================================================
 const DashboardCharts = ({ stats, reservationsByMonth, reservationsLast7Days, topDestinations, COLORS }) => (
   <>
-    {/* Stats */}
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
       <StatCard title="Utilisateurs" value={stats.users} icon={<Users />} />
       <StatCard title="Trajets" value={stats.trajets} icon={<Bus />} />
@@ -224,7 +217,6 @@ const DashboardCharts = ({ stats, reservationsByMonth, reservationsLast7Days, to
       <StatCard title="Revenus" value={`${stats.revenue.toLocaleString()} FCFA`} icon={<DollarSign />} />
     </div>
 
-    {/* Graphiques */}
     <div className="bg-white dark:bg-card-dark rounded-xl p-6 shadow">
       <h3 className="text-lg font-semibold mb-4">Réservations par mois</h3>
       <ResponsiveContainer width="100%" height={300}>

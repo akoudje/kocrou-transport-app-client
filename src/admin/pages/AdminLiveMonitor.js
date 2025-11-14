@@ -19,18 +19,24 @@ const AdminLiveMonitor = () => {
   const [admins, setAdmins] = useState([]);
   const [reservations, setReservations] = useState([]);
   const [connectedCount, setConnectedCount] = useState(0);
-
-  // 🔹 Données du graphique (max 15 points)
   const [activityData, setActivityData] = useState([]);
   const dataRef = useRef([]);
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
-    const socket = io(
-      process.env.REACT_APP_API_BASE_URL || "http://localhost:5000",
-      { transports: ["websocket"] }
-    );
+    const socket = io(api.defaults.baseURL, {
+      transports: ["websocket"],
+      auth: { token }, // ✅ envoi du JWT ici
+    });
 
-    socket.emit("admin_join", { email: "monitoring@kocrou" });
+    socket.on("connect", () => {
+      console.log("🟢 [LiveMonitor] Socket connecté avec JWT");
+      socket.emit("admin_join", { email: "monitoring@kocrou" });
+    });
+
+    socket.on("disconnect", () => {
+      console.warn("🔴 [LiveMonitor] Socket déconnecté");
+    });
 
     socket.on("monitoring_update", (data) => {
       if (data.admins) setAdmins(data.admins);
@@ -41,9 +47,7 @@ const AdminLiveMonitor = () => {
     });
 
     socket.on("reservation_created", (data) => {
-      message.success(
-        `🚍 Réservation créée (${data.trajet?.villeDepart} → ${data.trajet?.villeArrivee})`
-      );
+      message.success(`🚍 Réservation créée (${data.trajet?.villeDepart} → ${data.trajet?.villeArrivee})`);
       fetchReservations();
     });
 
@@ -64,16 +68,13 @@ const AdminLiveMonitor = () => {
     };
   }, []);
 
-  // 📊 Fonction : Mise à jour du graphique
   const updateChart = (adminCount, reservationCount) => {
     const timestamp = dayjs().format("HH:mm:ss");
     const newPoint = { time: timestamp, admins: adminCount, reservations: reservationCount };
-
-    dataRef.current = [...dataRef.current, newPoint].slice(-15); // max 15 points
+    dataRef.current = [...dataRef.current, newPoint].slice(-15);
     setActivityData([...dataRef.current]);
   };
 
-  // 🔍 Charger snapshot global
   const fetchMonitoringSnapshot = async () => {
     try {
       const { data } = await api.get("/monitoring");
@@ -88,7 +89,6 @@ const AdminLiveMonitor = () => {
     }
   };
 
-  // 🔍 Charger les réservations récentes
   const fetchReservations = async () => {
     try {
       const { data } = await api.get("/reservations/admin/reservations?limit=5");
@@ -99,14 +99,12 @@ const AdminLiveMonitor = () => {
     }
   };
 
-  // 🧩 Colonnes Admins
   const adminColumns = [
     { title: "Email", dataIndex: "email", key: "email" },
     {
       title: "Dernière activité",
       dataIndex: "lastActive",
-      render: (text) =>
-        text ? dayjs(text).format("DD/MM/YYYY HH:mm:ss") : "—",
+      render: (text) => (text ? dayjs(text).format("DD/MM/YYYY HH:mm:ss") : "—"),
     },
     {
       title: "Statut",
@@ -118,13 +116,11 @@ const AdminLiveMonitor = () => {
     },
   ];
 
-  // 🧾 Colonnes Réservations
   const reservationColumns = [
     { title: "Client", dataIndex: ["user", "email"], key: "user" },
     {
       title: "Trajet",
-      render: (r) =>
-        `${r.trajet?.villeDepart} → ${r.trajet?.villeArrivee || "-"}`,
+      render: (r) => `${r.trajet?.villeDepart} → ${r.trajet?.villeArrivee || "-"}`,
     },
     {
       title: "Compagnie",
@@ -143,7 +139,6 @@ const AdminLiveMonitor = () => {
         <Activity className="text-green-500 w-6 h-6" /> Monitoring en direct
       </h2>
 
-      {/* 🔹 Aperçu Graphique Temps Réel */}
       <Card
         title={
           <div className="flex items-center gap-2">
@@ -161,54 +156,21 @@ const AdminLiveMonitor = () => {
             <Tooltip
               contentStyle={{ backgroundColor: "#fff", borderRadius: 8 }}
               formatter={(value, name) =>
-                name === "admins"
-                  ? [`${value}`, "👑 Admins"]
-                  : [`${value}`, "🚌 Réservations"]
-              }
+                name === "admins" ? [`${value}`, "👑 Admins"] : [`${value}`, "🚌 Réservations"]}
             />
             <Legend />
-            <Line
-              type="monotone"
-              dataKey="admins"
-              stroke="#16a34a"
-              strokeWidth={2}
-              dot={false}
-              isAnimationActive={true}
-            />
-            <Line
-              type="monotone"
-              dataKey="reservations"
-              stroke="#8b5cf6"
-              strokeWidth={2}
-              dot={false}
-              isAnimationActive={true}
-            />
+            <Line type="monotone" dataKey="admins" stroke="#16a34a" strokeWidth={2} dot={false} />
+            <Line type="monotone" dataKey="reservations" stroke="#8b5cf6" strokeWidth={2} dot={false} />
           </LineChart>
         </ResponsiveContainer>
       </Card>
 
-      {/* 🔹 Section Admins connectés */}
-      <Card
-        title={`Administrateurs connectés (${connectedCount})`}
-        bordered
-        className="shadow-md"
-      >
-        <Table
-          columns={adminColumns}
-          dataSource={admins}
-          rowKey="email"
-          pagination={false}
-        />
+      <Card title={`Administrateurs connectés (${connectedCount})`} bordered className="shadow-md">
+        <Table columns={adminColumns} dataSource={admins} rowKey="email" pagination={false} />
       </Card>
 
-      {/* 🔹 Section dernières réservations */}
       <Card title="Dernières réservations" bordered className="shadow-md">
-        <Table
-          columns={reservationColumns}
-          dataSource={reservations}
-          rowKey="_id"
-          pagination={false}
-        />
+        <Table columns={reservationColumns} dataSource={reservations} rowKey="_id" pagination={false} />
       </Card>
     </div>
   );
