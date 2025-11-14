@@ -1,4 +1,3 @@
-// client/src/admin/pages/AdminLogin.js
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -13,8 +12,8 @@ const AdminLogin = () => {
 
   // 🔁 Redirige si déjà connecté
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user") || "null");
-    if (user?.isAdmin) navigate("/admin/dashboard");
+    const adminUser = JSON.parse(localStorage.getItem("adminUser") || "null");
+    if (adminUser?.isAdmin) navigate("/admin/");
   }, [navigate]);
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
@@ -27,6 +26,8 @@ const AdminLogin = () => {
       const { data } = await api.post("/auth/login", form);
 
       if (!data.user?.isAdmin) {
+        localStorage.removeItem("adminToken");
+        localStorage.removeItem("adminUser");
         Swal.fire({
           icon: "error",
           title: "Accès refusé 🚫",
@@ -36,9 +37,9 @@ const AdminLogin = () => {
       }
 
       // ✅ Stocker tokens et rediriger
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("refreshToken", data.refreshToken);
-      localStorage.setItem("user", JSON.stringify(data.user));
+      localStorage.setItem("adminToken", data.token);
+      localStorage.setItem("adminRefreshToken", data.refreshToken);
+      localStorage.setItem("adminUser", JSON.stringify(data.user));
 
       Swal.fire({
         icon: "success",
@@ -54,9 +55,7 @@ const AdminLogin = () => {
       Swal.fire({
         icon: "error",
         title: "Erreur de connexion",
-        text:
-          err.response?.data?.message ||
-          "Identifiants incorrects ou serveur injoignable.",
+        text: err.response?.data?.message || "Identifiants incorrects ou serveur injoignable.",
         confirmButtonColor: "#2563eb",
       });
     } finally {
