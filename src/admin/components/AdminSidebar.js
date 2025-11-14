@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 import { NavLink, useNavigate } from "react-router-dom";
 import {
@@ -15,13 +15,10 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import api from "../../utils/api";
-import { SettingsContext } from "../../context/SettingsContext"; // 👈 Ajout
 
 const AdminSidebar = () => {
   const navigate = useNavigate();
-  const { settings } = useContext(SettingsContext); // 👈 Récupération des settings globaux
 
-  // États dynamiques
   const [adminCount, setAdminCount] = useState(0);
   const [activeReservations, setActiveReservations] = useState(0);
   const [trajetCount, setTrajetCount] = useState(0);
@@ -29,10 +26,10 @@ const AdminSidebar = () => {
   const [socketConnected, setSocketConnected] = useState(false);
   const [liveChange, setLiveChange] = useState({ field: "", delta: 0 });
 
+  // ⚡ Connexion Socket.io
   useEffect(() => {
     const socket = io(
-      process.env.REACT_APP_API_BASE_URL ||
-        "https://kocrou-transport-app-server.onrender.com",
+      process.env.REACT_APP_API_BASE_URL || "http://localhost:5000",
       { transports: ["websocket"] }
     );
 
@@ -53,9 +50,11 @@ const AdminSidebar = () => {
     socket.on("reservation_deleted", () => fetchAllCounts());
 
     fetchAllCounts();
+
     return () => socket.disconnect();
   }, []);
 
+  // 🔄 Chargement des compteurs
   const fetchAllCounts = async () => {
     try {
       const [trajetsRes, reservationsRes, usersRes] = await Promise.all([
@@ -75,10 +74,7 @@ const AdminSidebar = () => {
       if (newTrajetCount !== trajetCount)
         triggerLiveChange("trajets", newTrajetCount - trajetCount);
       if (newActiveReservations !== activeReservations)
-        triggerLiveChange(
-          "reservations",
-          newActiveReservations - activeReservations
-        );
+        triggerLiveChange("reservations", newActiveReservations - activeReservations);
       if (newUserCount !== userCount)
         triggerLiveChange("users", newUserCount - userCount);
 
@@ -90,12 +86,14 @@ const AdminSidebar = () => {
     }
   };
 
+  // 🔔 Animation live
   const triggerLiveChange = (field, delta) => {
     if (delta === 0) return;
     setLiveChange({ field, delta });
     setTimeout(() => setLiveChange({ field: "", delta: 0 }), 1500);
   };
 
+  // 🔓 Déconnexion
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
@@ -103,134 +101,133 @@ const AdminSidebar = () => {
   };
 
   const menuItems = [
-    {
-      name: "Dashboard",
-      icon: <LayoutDashboard className="w-4 h-4" />,
-      path: "/admin",
-    },
-    {
-      name: "Trajets",
-      icon: <Bus className="w-4 h-4" />,
-      path: "/admin/trajets",
-      badge: trajetCount,
-      key: "trajets",
-    },
-    {
-      name: "Réservations",
-      icon: <CalendarDays className="w-4 h-4" />,
-      path: "/admin/reservations",
-      badge: activeReservations,
-      key: "reservations",
-    },
-    {
-      name: "Utilisateurs",
-      icon: <Users className="w-4 h-4" />,
-      path: "/admin/utilisateurs",
-      badge: userCount,
-      key: "users",
-    },
-    {
-      name: "Notifications",
-      icon: <Bell className="w-4 h-4" />,
-      path: "/admin/notifications",
-    },
-    {
-      name: "Rapports",
-      icon: <BarChart2 className="w-4 h-4" />,
-      path: "/admin/reports",
-    },
-    {
-      name: "Logs",
-      icon: <ClipboardList className="w-4 h-4" />,
-      path: "/admin/logs",
-    },
-    {
-      name: "Historique d’activité",
-      icon: <Activity className="w-5 h-5" />,
-      path: "/admin/activity",
-    },
-    {
-      name: "Paramètres",
-      icon: <Settings className="w-4 h-4" />,
-      path: "/admin/settings",
-    },
+    { name: "Dashboard", icon: <LayoutDashboard className="w-4 h-4" />, path: "/admin" },
+    { name: "Trajets", icon: <Bus className="w-4 h-4" />, path: "/admin/trajets", badge: trajetCount, key: "trajets" },
+    { name: "Réservations", icon: <CalendarDays className="w-4 h-4" />, path: "/admin/reservations", badge: activeReservations, key: "reservations" },
+    { name: "Utilisateurs", icon: <Users className="w-4 h-4" />, path: "/admin/utilisateurs", badge: userCount, key: "users" },
+    { name: "Notifications", icon: <Bell className="w-4 h-4" />, path: "/admin/notifications" },
+    { name: "Rapports", icon: <BarChart2 className="w-4 h-4" />, path: "/admin/reports" },
+    { name: "Logs", icon: <ClipboardList className="w-4 h-4" />, path: "/admin/logs" },
+    { name: "Historique d’activité", icon: <Activity className="w-5 h-5" />, path: "/admin/activity" },
+    { name: "Paramètres", icon: <Settings className="w-4 h-4" />, path: "/admin/settings" },
   ];
 
   return (
-    <aside
-      className="hidden md:flex flex-col w-64 shadow-lg min-h-screen p-5 relative overflow-hidden"
-      style={{
-        backgroundColor: "#fff",
-        borderRight: `4px solid ${settings?.couleurPrincipale || "#2563eb"}`,
-      }}
-    >
-      {/* 🧭 En-tête dynamique */}
-      <div className="mb-10 flex items-center gap-2 text-2xl font-bold tracking-tight">
-        {settings?.logo ? (
-          <img
-            src={settings.logo}
-            alt="Logo"
-            className="w-10 h-10 object-contain"
-          />
-        ) : (
-          <span>🚍</span>
-        )}
-        <span style={{ color: settings?.couleurPrincipale || "#2563eb" }}>
-          {settings?.compagnieName || "Kocrou Admin"}
-        </span>
+    <aside className="hidden md:flex flex-col w-64 bg-white dark:bg-card-dark shadow-lg min-h-screen p-5 relative overflow-hidden">
+      <div className="text-2xl font-bold text-primary mb-10 tracking-tight">
+        🚍 Kocrou Admin
       </div>
 
       {/* 📚 Menu principal */}
       <nav className="flex-1 space-y-2">
         {menuItems.map((item) => (
           <NavLink
-            to="/admin/live-monitor"
+            key={item.name}
+            to={item.path}
             className={({ isActive }) =>
-              `flex items-center justify-between px-4 py-2 rounded-lg font-medium transition ${
+              `relative flex items-center justify-between px-4 py-2 rounded-lg font-medium transition ${
                 isActive
                   ? "bg-primary text-white"
                   : "text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
               }`
             }
           >
-            <div className="flex items-center gap-2">
-              <Activity
-                className={`w-4 h-4 ${
-                  adminCount > 0
-                    ? "text-green-500 animate-pulse"
-                    : "text-gray-400"
-                }`}
-              />
-              <span>Monitoring Live</span>
+            <div className="flex items-center gap-3">
+              {item.icon}
+              <span>{item.name}</span>
             </div>
-            {adminCount > 0 && (
-              <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-green-500 text-white">
-                {adminCount}
-              </span>
+
+            {/* ✅ Badge dynamique */}
+            {item.badge !== undefined && item.name !== "Dashboard" && (
+              <div className="relative">
+                <span
+                  className={`text-xs font-bold px-2 py-0.5 rounded-full ${
+                    item.badge > 0
+                      ? "bg-green-500 text-white"
+                      : "bg-gray-300 text-gray-700"
+                  }`}
+                >
+                  {item.badge}
+                </span>
+
+                <AnimatePresence>
+                  {liveChange.field === item.key && liveChange.delta !== 0 && (
+                    <motion.span
+                      key={`${item.key}-${liveChange.delta}`}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: -10 }}
+                      exit={{ opacity: 0, y: -20 }}
+                      transition={{ duration: 0.8 }}
+                      className={`absolute right-0 text-xs font-bold ${
+                        liveChange.delta > 0 ? "text-green-500" : "text-red-500"
+                      }`}
+                      style={{ top: "-1rem", right: "0.2rem" }}
+                    >
+                      {liveChange.delta > 0
+                        ? `+${liveChange.delta}`
+                        : liveChange.delta}
+                    </motion.span>
+                  )}
+                </AnimatePresence>
+              </div>
             )}
           </NavLink>
         ))}
+
+        {/* 🟢 Monitoring Live */}
+        <NavLink
+          to="/admin/live-monitor"
+          className={({ isActive }) =>
+            `flex items-center justify-between px-4 py-2 rounded-lg font-medium transition ${
+              isActive
+                ? "bg-primary text-white"
+                : "text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+            }`
+          }
+        >
+          <div className="flex items-center gap-2">
+            <Activity
+              className={`w-4 h-4 ${
+                adminCount > 0 ? "text-green-500 animate-pulse" : "text-gray-400"
+              }`}
+            />
+            <span>Monitoring Live</span>
+          </div>
+          {adminCount > 0 && (
+            <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-green-500 text-white">
+              {adminCount}
+            </span>
+          )}
+        </NavLink>
       </nav>
 
       {/* ⚙️ Pied de sidebar */}
       <div className="mt-auto border-t border-gray-200 dark:border-gray-700 pt-4">
-        <div className="flex items-center justify-between mb-2 text-sm">
-          <span
-            className={`w-3 h-3 rounded-full ${
-              socketConnected ? "bg-green-500 animate-pulse" : "bg-red-500"
-            }`}
-          ></span>
-          <span className="text-gray-500 dark:text-gray-400">
-            {socketConnected ? "Connecté" : "Déconnecté"}
-          </span>
+        <div className="flex items-center justify-between mb-2">
+          <div className="flex items-center gap-2 text-sm">
+            <span
+              className={`w-3 h-3 rounded-full ${
+                socketConnected ? "bg-green-500 animate-pulse" : "bg-red-500"
+              }`}
+            ></span>
+            <span className="text-gray-500 dark:text-gray-400">
+              {socketConnected ? "Connecté au temps réel" : "Déconnecté"}
+            </span>
+          </div>
         </div>
 
         <button
           onClick={handleLogout}
           className="flex items-center gap-2 text-red-500 hover:text-red-700 transition w-full"
         >
-          <LogOut className="w-5 h-5" /> Déconnexion
+          <LogOut className="w-5 h-5" />
+          Déconnexion
         </button>
+
+        <div className="mt-3 flex items-center gap-2 text-gray-400 text-sm">
+          <Settings className="w-4 h-4" />
+          Version 1.0.0
+        </div>
       </div>
     </aside>
   );
