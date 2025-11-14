@@ -52,6 +52,7 @@ const AdminSidebar = () => {
     fetchAllCounts();
 
     return () => socket.disconnect();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // 🔄 Chargement des compteurs
@@ -100,6 +101,7 @@ const AdminSidebar = () => {
     navigate("/login");
   };
 
+  // 🧭 Menu latéral
   const menuItems = [
     { name: "Dashboard", icon: <LayoutDashboard className="w-4 h-4" />, path: "/admin" },
     { name: "Trajets", icon: <Bus className="w-4 h-4" />, path: "/admin/trajets", badge: trajetCount, key: "trajets" },
@@ -124,9 +126,10 @@ const AdminSidebar = () => {
           <NavLink
             key={item.name}
             to={item.path}
-            className={({ isActive }) =>
+            // ✅ ESLint-friendly version : on définit isActive dans la fonction
+            className={(navData) =>
               `relative flex items-center justify-between px-4 py-2 rounded-lg font-medium transition ${
-                isActive
+                navData.isActive
                   ? "bg-primary text-white"
                   : "text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
               }`
@@ -177,9 +180,9 @@ const AdminSidebar = () => {
         {/* 🟢 Monitoring Live */}
         <NavLink
           to="/admin/live-monitor"
-          className={({ isActive }) =>
+          className={(navData) =>
             `flex items-center justify-between px-4 py-2 rounded-lg font-medium transition ${
-              isActive
+              navData.isActive
                 ? "bg-primary text-white"
                 : "text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
             }`
