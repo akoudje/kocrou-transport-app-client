@@ -1,21 +1,15 @@
-// ✅ Correction : ajout de const isAdmin = user?.isAdmin;
-
 import React, { useEffect, useState, useContext } from "react";
 import { Bus, Menu, Sun, Moon, LogOut, User } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { AuthContext } from "../context/AuthContext";
-import { SettingsContext } from "../context/SettingsContext";
 import { Link, useNavigate } from "react-router-dom";
 
 const Header = () => {
-  const { settings } = useContext(SettingsContext);
-  const { user, logout } = useContext(AuthContext);
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
   const [menuOpen, setMenuOpen] = useState(false);
   const [accountMenuOpen, setAccountMenuOpen] = useState(false);
+  const { user, logout } = useContext(AuthContext);
   const navigate = useNavigate();
-
-  const isAdmin = user?.isAdmin; // ✅ Correction ajoutée ici
 
   useEffect(() => {
     document.documentElement.classList.toggle("dark", theme === "dark");
@@ -33,23 +27,15 @@ const Header = () => {
     >
       <div className="container mx-auto px-4">
         <div className="flex h-20 items-center justify-between border-b border-subtle-light dark:border-subtle-dark">
-          {/* Logo dynamique */}
+          {/* Logo */}
           <Link to="/" className="flex items-center gap-3 text-primary">
-            {settings?.logo ? (
-              <img
-                src={settings.logo}
-                alt="Logo"
-                className="w-10 h-10 object-contain"
-              />
-            ) : (
-              <Bus className="w-7 h-7" />
-            )}
+            <Bus className="w-7 h-7" />
             <h2 className="text-xl font-bold tracking-tight text-text-light dark:text-text-dark">
-              {settings?.compagnieName || "Kocrou Transport"}
+              Kocrou Transport
             </h2>
           </Link>
 
-          {/* Nav */}
+          {/* Navigation */}
           <nav className="hidden md:flex items-center gap-9">
             <a href="#hero" className="text-sm font-medium hover:text-primary transition">Accueil</a>
             {user && (
@@ -59,10 +45,12 @@ const Header = () => {
             )}
             <a href="#destinations" className="text-sm font-medium hover:text-primary transition">Destinations</a>
             <a href="#contact" className="text-sm font-medium hover:text-primary transition">Contact</a>
+           
           </nav>
 
           {/* Actions */}
           <div className="flex items-center gap-2 relative">
+            {/* Thème */}
             <button
               onClick={toggleTheme}
               className="p-2 rounded-lg hover:bg-subtle-light dark:hover:bg-subtle-dark"
@@ -75,7 +63,8 @@ const Header = () => {
               )}
             </button>
 
-            {!user && !isAdmin ? (
+            {/* Connexion / Compte */}
+            {!user ? (
               <button
                 onClick={() => navigate("/login")}
                 className="h-10 px-4 bg-primary text-white text-sm font-bold rounded-lg hover:bg-primary/90 transition"
@@ -89,7 +78,7 @@ const Header = () => {
                   className="hidden sm:flex items-center gap-2 h-10 px-4 bg-subtle-light dark:bg-subtle-dark text-sm font-bold rounded-lg hover:bg-primary/20 dark:hover:bg-primary/30 transition"
                 >
                   <User className="w-4 h-4" />
-                  <span>{user?.name?.split(" ")[0] || "Mon Compte"}</span>
+                  <span>{user.name?.split(" ")[0] || "Mon Compte"}</span>
                 </button>
 
                 <AnimatePresence>
@@ -101,8 +90,8 @@ const Header = () => {
                       className="absolute right-0 mt-2 w-48 bg-card-light dark:bg-card-dark rounded-xl shadow-lg border border-subtle-light dark:border-subtle-dark overflow-hidden z-50"
                     >
                       <div className="px-4 py-3 border-b border-subtle-light dark:border-subtle-dark">
-                        <p className="text-sm font-semibold">{user?.name}</p>
-                        <p className="text-xs text-gray-500">{user?.email}</p>
+                        <p className="text-sm font-semibold">{user.name}</p>
+                        <p className="text-xs text-gray-500">{user.email}</p>
                       </div>
                       <button
                         onClick={() => {
@@ -118,11 +107,55 @@ const Header = () => {
                 </AnimatePresence>
               </div>
             )}
+
+            {/* Menu mobile */}
+            <button
+              onClick={() => setMenuOpen(!menuOpen)}
+              className="md:hidden p-2 rounded-lg hover:bg-subtle-light dark:hover:bg-subtle-dark"
+            >
+              <Menu className="w-6 h-6" />
+            </button>
           </div>
         </div>
       </div>
+
+      {/* Menu mobile */}
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.nav
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            className="md:hidden bg-background-light dark:bg-background-dark border-t border-subtle-light dark:border-subtle-dark"
+          >
+            <div className="flex flex-col p-4 space-y-3">
+              <a href="#hero" className="hover:text-primary">Accueil</a>
+              {user && <Link to="/mes-reservations" className="hover:text-primary">Mes Réservations</Link>}
+              <a href="#destinations" className="hover:text-primary">Destinations</a>
+              <a href="#contact" className="hover:text-primary">Contact</a>
+              {!user ? (
+                <button
+                  onClick={() => navigate("/login")}
+                  className="mt-2 bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition"
+                >
+                  Se connecter
+                </button>
+              ) : (
+                <button
+                  onClick={logout}
+                  className="mt-2 bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition"
+                >
+                  Déconnexion
+                </button>
+              )}
+            </div>
+          </motion.nav>
+        )}
+      </AnimatePresence>
     </motion.header>
   );
 };
 
 export default Header;
+
+
