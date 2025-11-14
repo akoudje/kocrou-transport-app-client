@@ -1,29 +1,33 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 
-/**
- * 🔒 ProtectedRoute
- * - Vérifie si un utilisateur est connecté (via AuthContext)
- * - Si non, redirige vers /login
- * - Si oui, rend le composant enfant (page protégée)
- */
 const ProtectedRoute = ({ children }) => {
-  const { user } = useContext(AuthContext);
+  const { user, checkUser } = useContext(AuthContext);
   const location = useLocation();
+  const [isValid, setIsValid] = useState(user ? true : null);
 
-  // Si aucun utilisateur connecté → redirection vers /login
-  if (!user) {
+  useEffect(() => {
+    if (!user) {
+      const verify = async () => {
+        const result = await checkUser();
+        setIsValid(result);
+      };
+      verify();
+    }
+  }, [user, checkUser]);
+
+  if (isValid === null) return null; // ou un spinner
+  if (!isValid) {
     return (
       <Navigate
         to="/login"
         replace
-        state={{ from: location.pathname }} // pour revenir à la page initiale après connexion
+        state={{ from: location.pathname }}
       />
     );
   }
 
-  // ✅ Utilisateur connecté → on affiche la page protégée
   return children;
 };
 

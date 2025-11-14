@@ -20,7 +20,8 @@ import {
   SaveOutlined,
 } from "@ant-design/icons";
 import dayjs from "dayjs";
-import api from "../../utils/api";
+import smartApi from "../../utils/smartApi";
+
 import Swal from "sweetalert2";
 
 const VEHICULE_TYPES = [
@@ -64,7 +65,7 @@ const FormTrajet = ({ trajet, onSuccess, onCancel }) => {
   // ✅ Vérification doublon
   const checkDuplicateTrajet = async (values) => {
     try {
-      const { data } = await api.get("/trajets");
+      const { data } = await smartApi.get("/trajets");
       const existing = data.data || [];
 
       return existing.find((t) => {
@@ -168,10 +169,10 @@ const FormTrajet = ({ trajet, onSuccess, onCancel }) => {
 
       // 🔥 Envoi au backend
       if (trajet?._id) {
-        await api.put(`/trajets/${trajet._id}`, payload);
+        await smartApi.put(`/trajets/${trajet._id}`, payload);
         message.success("Trajet mis à jour avec succès 🚍");
       } else {
-        await api.post("/trajets", payload);
+        await smartApi.post("/trajets", payload);
         message.success("Nouveau trajet ajouté ✅");
       }
 

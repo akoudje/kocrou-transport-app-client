@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ShieldCheck, Loader2, LockKeyhole, Mail } from "lucide-react";
 import Swal from "sweetalert2";
-import api from "../../utils/api";
+import smartApi from "../../utils/smartApi";
 
 const AdminLogin = () => {
   const navigate = useNavigate();
@@ -23,7 +23,7 @@ const AdminLogin = () => {
     setLoading(true);
 
     try {
-      const { data } = await api.post("/auth/login", form);
+      const { data } = await smartApi.post("/auth/login", form);
 
       if (!data.user?.isAdmin) {
         localStorage.removeItem("adminToken");

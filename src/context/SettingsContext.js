@@ -1,6 +1,6 @@
 // client/src/context/SettingsContext.js
 import React, { createContext, useEffect, useState } from "react";
-import api from "../utils/api";
+import smartApi from "../utils/smartApi";
 
 export const SettingsContext = createContext();
 
@@ -15,7 +15,7 @@ export const SettingsProvider = ({ children }) => {
   const fetchSettings = async (silent = false) => {
     try {
       setLoading(true);
-      const { data } = await api.get("/settings");
+      const { data } = await smartApi.get("/settings");
       const settingsData = data?.data || data;
 
       if (!settingsData) throw new Error("Aucun paramètre système trouvé.");

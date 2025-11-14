@@ -22,7 +22,7 @@ import {
   CarOutlined,
 } from "@ant-design/icons";
 import { io } from "socket.io-client";
-import api from "../../utils/api";
+import smartApi from "../../utils/smartApi";
 import dayjs from "dayjs";
 import FormTrajet from "./FormTrajet";
 
@@ -70,7 +70,7 @@ const AdminTrajets = () => {
   const fetchTrajets = async () => {
     try {
       setLoading(true);
-      const res = await api.get("/trajets");
+      const res = await smartApi.get("/trajets");
       setTrajets(res.data.data || []);
     } catch (error) {
       console.error(error);
@@ -101,7 +101,7 @@ const AdminTrajets = () => {
       cancelText: "Annuler",
       onOk: async () => {
         try {
-          await api.delete(`/trajets/${id}`);
+          await smartApi.delete(`/trajets/${id}`);
           message.success("Trajet supprimé !");
           fetchTrajets();
         } catch (error) {

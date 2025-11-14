@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Bell, Trash2, Loader2, RefreshCw } from "lucide-react";
 import Swal from "sweetalert2";
 import { io } from "socket.io-client";
-import api from "../../utils/api";
+import smartApi from "../../utils/smartApi";
 
 const SOCKET_URL =
   process.env.REACT_APP_SOCKET_URL ||
@@ -19,7 +19,7 @@ const AdminNotifications = () => {
   const fetchNotifications = async () => {
     try {
       setLoading(true);
-      const { data } = await api.get("/notifications", {
+      const { data } = await smartApi.get("/notifications", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setNotifications(data.reverse());
@@ -78,7 +78,7 @@ const AdminNotifications = () => {
     if (!ask.isConfirmed) return;
 
     try {
-      await api.delete(`/notifications/${id}`, {
+      await smartApi.delete(`/notifications/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setNotifications((prev) => prev.filter((n) => n._id !== id));
@@ -111,7 +111,7 @@ const AdminNotifications = () => {
     if (!ask.isConfirmed) return;
 
     try {
-      await api.delete("/notifications", {
+      await smartApi.delete("/notifications", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setNotifications([]);

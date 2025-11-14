@@ -13,7 +13,7 @@ import Swal from "sweetalert2";
 import * as XLSX from "xlsx";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
-import api from "../../utils/api";
+import smartApi from "../../utils/smartApi";
 import {
   BarChart,
   Bar,
@@ -37,7 +37,7 @@ const AdminReports = () => {
   const fetchReport = async () => {
     try {
       setLoading(true);
-      const { data } = await api.get(`/reports?month=${monthFilter}`, {
+      const { data } = await smartApi.get(`/reports?month=${monthFilter}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       // supporte { data: {...} } ou {...}

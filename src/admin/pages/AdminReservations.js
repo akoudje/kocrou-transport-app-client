@@ -13,7 +13,7 @@ import {
   BadgeCheck,
 } from "lucide-react";
 import Swal from "sweetalert2";
-import api from "../../utils/api";
+import smartApi from "../../utils/smartApi";
 import { useNavigate } from "react-router-dom";
 
 const AdminReservations = () => {
@@ -55,7 +55,7 @@ const AdminReservations = () => {
       if (villeArriveeFilter) params.villeArrivee = villeArriveeFilter;
       if (dateFilter) params.dateDepart = dateFilter;
 
-      const { data } = await api.get("/reservations/admin/reservations", {
+      const { data } = await smartApi.get("/reservations/admin/reservations", {
         params,
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -93,7 +93,7 @@ const AdminReservations = () => {
     if (!ask.isConfirmed) return;
 
     try {
-      await api.put(`/reservations/${id}/cancel`, {}, { headers: { Authorization: `Bearer ${token}` } });
+      await smartApi.put(`/reservations/${id}/cancel`, {}, { headers: { Authorization: `Bearer ${token}` } });
       Swal.fire("✅ Annulée", "La réservation a été annulée.", "success");
       fetchReservations(currentPage);
     } catch (err) {
@@ -115,7 +115,7 @@ const AdminReservations = () => {
     if (!ask.isConfirmed) return;
 
     try {
-      await api.put(`/reservations/${id}/validate`, {}, { headers: { Authorization: `Bearer ${token}` } });
+      await smartApi.put(`/reservations/${id}/validate`, {}, { headers: { Authorization: `Bearer ${token}` } });
       Swal.fire("✅ Validée", "Réservation marquée comme embarquée.", "success");
       fetchReservations(currentPage);
     } catch (err) {
@@ -137,7 +137,7 @@ const AdminReservations = () => {
     if (!ask.isConfirmed) return;
 
     try {
-      await api.delete(`/reservations/${id}`, { headers: { Authorization: `Bearer ${token}` } });
+      await smartApi.delete(`/reservations/${id}`, { headers: { Authorization: `Bearer ${token}` } });
       Swal.fire("🗑️ Supprimée", "Réservation supprimée.", "success");
       fetchReservations(currentPage);
     } catch (err) {

@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Card, Table, Tag, message } from "antd";
 import { io } from "socket.io-client";
-import api from "../../utils/api";
+import smartApi from "../../utils/smartApi";
 import dayjs from "dayjs";
 import { Activity, TrendingUp } from "lucide-react";
 import {
@@ -24,7 +24,7 @@ const AdminLiveMonitor = () => {
   const token = localStorage.getItem("token");
 
   useEffect(() => {
-    const socket = io(api.defaults.baseURL, {
+    const socket = io(smartApi.defaults.baseURL, {
       transports: ["websocket"],
       auth: { token }, // ✅ envoi du JWT ici
     });
@@ -77,7 +77,7 @@ const AdminLiveMonitor = () => {
 
   const fetchMonitoringSnapshot = async () => {
     try {
-      const { data } = await api.get("/monitoring");
+      const { data } = await smartApi.get("/monitoring");
       if (data.success) {
         setAdmins(data.admins || []);
         setReservations(data.recentReservations || []);
@@ -91,7 +91,7 @@ const AdminLiveMonitor = () => {
 
   const fetchReservations = async () => {
     try {
-      const { data } = await api.get("/reservations/admin/reservations?limit=5");
+      const { data } = await smartApi.get("/reservations/admin/reservations?limit=5");
       setReservations(data.data || []);
       updateChart(connectedCount, data.data?.length || 0);
     } catch (err) {

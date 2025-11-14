@@ -5,7 +5,7 @@ import { Loader2, Trash2, Bus, CalendarDays, MapPin, Ticket } from "lucide-react
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { io } from "socket.io-client";
-import api from "../utils/api";
+import smartApi from "../utils/smartApi";
 
 // 🔌 Connexion WebSocket
 const socket = io(process.env.REACT_APP_API_BASE_URL || "http://localhost:5000", {
@@ -24,7 +24,7 @@ const ReservationsPage = () => {
   const fetchReservations = async () => {
     try {
       setLoading(true);
-      const res = await api.get("/reservations");
+      const res = await smartApi.get("/reservations");
       setReservations(res.data);
     } catch (err) {
       console.error("Erreur chargement réservations :", err);
@@ -79,7 +79,7 @@ const ReservationsPage = () => {
     if (!confirmation.isConfirmed) return;
 
     try {
-      await api.delete(`/reservations/${id}`);
+      await smartApi.delete(`/reservations/${id}`);
       Swal.fire({
         title: "Réservation supprimée ✅",
         icon: "success",

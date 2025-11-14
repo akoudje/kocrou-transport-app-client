@@ -10,7 +10,7 @@ import {
   Upload,
 } from "lucide-react";
 import Swal from "sweetalert2";
-import api from "../../utils/api";
+import smartApi from "../../utils/smartApi";
 import { SettingsContext } from "../../context/SettingsContext"; // 👈 Ajout
 
 const AdminSettings = () => {
@@ -31,7 +31,7 @@ const AdminSettings = () => {
   const fetchSettings = async () => {
     try {
       setLoading(true);
-      const { data } = await api.get("/settings", {
+      const { data } = await smartApi.get("/settings", {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -77,7 +77,7 @@ const AdminSettings = () => {
 
     try {
       setLoading(true);
-      const { data } = await api.post("/settings/upload-logo", formData, {
+      const { data } = await smartApi.post("/settings/upload-logo", formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",
@@ -112,7 +112,7 @@ const AdminSettings = () => {
   e.preventDefault();
   try {
     setLoading(true);
-    const { data } = await api.put("/settings", settings, {
+    const { data } = await smartApi.put("/settings", settings, {
       headers: { Authorization: `Bearer ${token}` },
     });    
 

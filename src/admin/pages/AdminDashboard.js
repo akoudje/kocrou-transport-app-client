@@ -14,7 +14,7 @@ import {
 } from "recharts";
 import { Users, Bus, DollarSign, Calendar, Clock, Wifi } from "lucide-react";
 import { message, Tag } from "antd";
-import api from "../../utils/api";
+import smartApi from "../../utils/smartApi";
 import { io } from "socket.io-client";
 
 
@@ -47,9 +47,9 @@ const AdminDashboard = () => {
       const headers = { Authorization: `Bearer ${token}` };
 
       const [usersRes, trajetsRes, reservationsRes] = await Promise.all([
-        api.get("/users", { headers }),
-        api.get("/trajets", { headers }),
-        api.get("/reservations/admin/reservations?all=true", { headers }),
+        smartApi.get("/users", { headers }),
+        smartApi.get("/trajets", { headers }),
+        smartApi.get("/reservations/admin/reservations?all=true", { headers }),
       ]);
 
       const allUsers = usersRes.data?.data || [];
@@ -123,7 +123,7 @@ const AdminDashboard = () => {
   // ⚡ Connexion WebSocket sécurisée
   // ======================================================
   useEffect(() => {
-    const socket = io(api.defaults.baseURL, {
+    const socket = io(smartApi.defaults.baseURL, {
       transports: ["websocket"],
       auth: { token }, // ✅ on envoie le JWT au serveur
     });

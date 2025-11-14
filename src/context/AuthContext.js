@@ -1,6 +1,6 @@
 // client/src/context/AuthContext.js
 import React, { createContext, useState, useEffect, useCallback } from "react";
-import api from "../utils/api";
+import smartApi from "../utils/smartApi";
 import Swal from "sweetalert2";
 
 export const AuthContext = createContext();
@@ -33,9 +33,9 @@ export const AuthProvider = ({ children }) => {
   // ✅ Applique le token à Axios
   useEffect(() => {
     if (token) {
-      api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+      smartApi.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     } else {
-      delete api.defaults.headers.common["Authorization"];
+      delete smartApi.defaults.headers.common["Authorization"];
     }
   }, [token]);
 
@@ -46,7 +46,7 @@ export const AuthProvider = ({ children }) => {
     setLoading(true);
     setError(null);
     try {
-      const { data } = await api.post("/auth/register", { name, email, password });
+      const { data } = await smartApi.post("/auth/register", { name, email, password });
 
       Swal.fire({
         icon: "success",
@@ -83,7 +83,7 @@ export const AuthProvider = ({ children }) => {
     setLoading(true);
     setError(null);
     try {
-      const { data } = await api.post("/auth/login", { email, password });
+      const { data } = await smartApi.post("/auth/login", { email, password });
 
       setUser(data.user);
       setToken(data.token);
@@ -138,7 +138,7 @@ export const AuthProvider = ({ children }) => {
   const refreshAccessToken = useCallback(async () => {
     if (!refreshToken) return;
     try {
-      const { data } = await api.post("/auth/refresh", { refreshToken });
+      const { data } = await smartApi.post("/auth/refresh", { refreshToken });
       setToken(data.token);
       localStorage.setItem("token", data.token);
       console.log("♻️ Token régénéré avec succès");
@@ -147,6 +147,49 @@ export const AuthProvider = ({ children }) => {
       logout();
     }
   }, [refreshToken, logout]);
+
+  /* =========================================================
+     CHECK USER
+  ========================================================= */
+const checkUser = useCallback(async () => {
+  const token = localStorage.getItem("token");
+  if (!token) return false;
+
+  try {
+    const { data } = await smartApi.get("/auth/user", {
+      headers: { Authorization: `Bearer ${token}` },
+      withCredentials: true,
+    });
+
+    if (data?.user) {
+      setUser(data.user); // met à jour le contexte si besoin
+      return true;
+    }
+    return false;
+  } catch (err) {
+    console.warn("❌ Échec de la vérification utilisateur :", err);
+    return false;
+  }
+}, []);
+
+  /* =========================================================
+     CHECK ADMIN
+  ========================================================= */
+  const checkAdmin = useCallback(async () => {
+  const token = localStorage.getItem("adminToken");
+  if (!token) return false;
+
+  try {
+    const { data } = await smartApi.get("/auth/user", {
+      headers: { Authorization: `Bearer ${token}` },
+      withCredentials: true,
+    });
+    return data?.isAdmin === true;
+  } catch (err) {
+    console.warn("❌ Échec de la vérification admin :", err);
+    return false;
+  }
+}, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -167,6 +210,8 @@ export const AuthProvider = ({ children }) => {
         login,
         logout,
         isAuthenticated: !!user,
+        checkUser,
+        checkAdmin, // ✅ ajouté ici
       }}
     >
       {children}

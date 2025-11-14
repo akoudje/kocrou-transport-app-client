@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Activity, Loader2, RefreshCw, ShieldAlert } from "lucide-react";
 import Swal from "sweetalert2";
-import api from "../../utils/api";
+import smartApi from "../../utils/smartApi";
 
 // 🧩 Intervalle du rafraîchissement des logs
 const REFRESH_INTERVAL = 60000; // 1 min
@@ -20,7 +20,7 @@ const AdminActivity = () => {
    */
   const refreshTokenSilently = async () => {
     try {
-      const { data } = await api.get("/auth/refresh", {
+      const { data } = await smartApi.get("/auth/refresh", {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -49,7 +49,7 @@ const AdminActivity = () => {
 
     try {
       setLoading(true);
-      const { data } = await api.get("/reports/logs", {
+      const { data } = await smartApi.get("/reports/logs", {
         headers: { Authorization: `Bearer ${token}` },
       });
 

@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { Loader2, Bus } from "lucide-react";
 import Swal from "sweetalert2";
 import SeatGrid from "../components/SeatGrid";
-import api from "../utils/api";
+import smartApi from "../utils/smartApi";
 
 const BookingPage = () => {
   const { state } = useLocation();
@@ -27,7 +27,7 @@ const BookingPage = () => {
       if (!trajet?._id) return;
 
       try {
-        const { data } = await api.get(`/reservations/trajet/${trajet._id}`);
+        const { data } = await smartApi.get(`/reservations/trajet/${trajet._id}`);
 
         // ✅ Normalisation en nombres (évite les conflits "12" vs 12)
         const seats = Array.isArray(data)
@@ -86,7 +86,7 @@ const BookingPage = () => {
     try {
       setLoading(true);
 
-      const { data } = await api.post("/reservations", {
+      const { data } = await smartApi.post("/reservations", {
         trajetId: trajet._id,
         segment,
         seat: selectedSeats[0],

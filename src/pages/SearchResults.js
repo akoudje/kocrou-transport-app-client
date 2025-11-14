@@ -6,7 +6,7 @@ import { ArrowLeft, Bus, Loader2, MapPin } from "lucide-react";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import { io } from "socket.io-client";
-import api from "../utils/api";
+import smartApi from "../utils/smartApi";
 
 // 🔌 Connexion WebSocket globale
 const socket = io(process.env.REACT_APP_API_BASE_URL || "http://localhost:5000", {
@@ -32,7 +32,7 @@ const SearchResults = () => {
   const fetchResults = async () => {
     try {
       setLoading(true);
-      const { data } = await api.get("/trajets", { params: { depart, arrivee } });
+      const { data } = await smartApi.get("/trajets", { params: { depart, arrivee } });
       const trajets = data.data || data;
 
       const formattedResults = trajets.flatMap((trajet) => {

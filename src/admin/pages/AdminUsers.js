@@ -13,7 +13,7 @@ import {
   Loader2,
 } from "lucide-react";
 import Swal from "sweetalert2";
-import api from "../../utils/api"; // ✅ centralisé
+import smartApi from "../../utils/smartApi"; // ✅ centralisé
 import { AuthContext } from "../../context/AuthContext";
 
 const AdminUsers = () => {
@@ -31,7 +31,7 @@ const AdminUsers = () => {
   const fetchUsers = async () => {
     try {
       setLoading(true);
-      const res = await api.get("/users", {
+      const res = await smartApi.get("/users", {
         headers: { Authorization: `Bearer ${token}` },
       });
       const allUsers = res.data?.data || [];
@@ -98,7 +98,7 @@ const AdminUsers = () => {
     if (!ask.isConfirmed) return;
 
     try {
-      await api.delete(`/users/${id}`, {
+      await smartApi.delete(`/users/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       Swal.fire("Supprimé ✅", "L’utilisateur a été supprimé.", "success");
@@ -123,7 +123,7 @@ const AdminUsers = () => {
     if (!ask.isConfirmed) return;
 
     try {
-      await api.put(
+      await smartApi.put(
         `/users/${id}/promote`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }

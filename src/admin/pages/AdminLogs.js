@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { FileText, Loader2, Trash2, RefreshCw } from "lucide-react";
 import Swal from "sweetalert2";
-import api from "../../utils/api";
+import smartApi from "../../utils/smartApi";
 
 const AdminLogs = () => {
   const [logs, setLogs] = useState([]);
@@ -15,7 +15,7 @@ const AdminLogs = () => {
   const fetchLogs = async () => {
     try {
       setLoading(true);
-      const { data } = await api.get("/reports/logs", {
+      const { data } = await smartApi.get("/reports/logs", {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -57,7 +57,7 @@ const AdminLogs = () => {
     if (!ask.isConfirmed) return;
 
     try {
-      await api.delete("/reports/logs", {
+      await smartApi.delete("/reports/logs", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setLogs([]);

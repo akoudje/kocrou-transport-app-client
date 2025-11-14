@@ -15,7 +15,7 @@ import {
   ClipboardList,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import api from "../../utils/api";
+import smartApi from "../../utils/smartApi";
 
 const AdminSidebar = () => {
   const navigate = useNavigate();
@@ -31,7 +31,7 @@ const AdminSidebar = () => {
   useEffect(() => {
     const token = localStorage.getItem("token");
 
-    const socket = io(api.defaults.baseURL, {
+    const socket = io(smartApi.defaults.baseURL, {
       transports: ["websocket"],
       auth: { token }, // ✅ on envoie le token JWT ici
       reconnectionAttempts: 5,
@@ -69,9 +69,9 @@ const AdminSidebar = () => {
   const fetchAllCounts = async () => {
     try {
       const [trajetsRes, reservationsRes, usersRes] = await Promise.all([
-        api.get("/trajets"),
-        api.get("/reservations/admin/reservations?statut=confirmée&all=true"),
-        api.get("/users"),
+        smartApi.get("/trajets"),
+        smartApi.get("/reservations/admin/reservations?statut=confirmée&all=true"),
+        smartApi.get("/users"),
       ]);
 
       const newTrajetCount = trajetsRes.data?.data?.length || 0;

@@ -12,7 +12,7 @@ import {
   CheckCircle2,
   Loader2,
 } from "lucide-react";
-import api from "../../utils/api"; // ✅ utilise la config API centralisée
+import smartApi from "../../utils/smartApi"; // ✅ utilise la config API centralisée
 
 const AdminTicketView = () => {
   const { id } = useParams();
@@ -25,7 +25,7 @@ const AdminTicketView = () => {
   useEffect(() => {
     const fetchReservation = async () => {
       try {
-        const { data } = await api.get(`/reservations/admin/reservations`);
+        const { data } = await smartApi.get(`/reservations/admin/reservations`);
         const found = data.find((r) => r._id === id);
         setReservation(found || null);
       } catch (err) {
@@ -52,7 +52,7 @@ const AdminTicketView = () => {
     if (!ask.isConfirmed) return;
 
     try {
-      await api.put(`/reservations/admin/reservations/${id}/validate`);
+      await smartApi.put(`/reservations/admin/reservations/${id}/validate`);
       Swal.fire("Validée ✅", "Le billet a été validé à l’embarquement.", "success");
       setReservation((prev) => ({ ...prev, statut: "validée" }));
     } catch (err) {
