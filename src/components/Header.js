@@ -9,7 +9,7 @@ import { Link, useNavigate } from "react-router-dom";
 const Header = () => {
   const { settings } = useContext(SettingsContext);
   const { user, logout } = useContext(AuthContext);
-  const isAdmin = user?.isAdmin; // ✅ Ajoute cette ligne juste après le useContext
+ // const isAdmin = user?.isAdmin; // ✅ Ajoute cette ligne juste après le useContext
 
 
   const navigate = useNavigate();
