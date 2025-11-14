@@ -1,3 +1,4 @@
+// src/admin/components/AdminSidebar.js
 import React, { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 import { NavLink, useNavigate } from "react-router-dom";
@@ -26,20 +27,30 @@ const AdminSidebar = () => {
   const [socketConnected, setSocketConnected] = useState(false);
   const [liveChange, setLiveChange] = useState({ field: "", delta: 0 });
 
-  // ⚡ Connexion Socket.io
+  // ⚡ Connexion Socket.io avec AUTH TOKEN
   useEffect(() => {
-    const socket = io(
-      process.env.REACT_APP_API_BASE_URL || "http://localhost:5000",
-      { transports: ["websocket"] }
-    );
+    const token = localStorage.getItem("token");
+
+    const socket = io(api.defaults.baseURL, {
+      transports: ["websocket"],
+      auth: { token }, // ✅ on envoie le token JWT ici
+      reconnectionAttempts: 5,
+      reconnectionDelay: 2000,
+    });
 
     socket.on("connect", () => {
       setSocketConnected(true);
+      console.log("🟢 Socket connecté avec auth JWT");
       socket.emit("admin_join", { email: "sidebar-monitor@admin" });
     });
 
     socket.on("disconnect", () => {
       setSocketConnected(false);
+      console.warn("🔴 Socket déconnecté");
+    });
+
+    socket.on("connect_error", (err) => {
+      console.error("⚠️ Erreur connexion Socket.io :", err.message);
     });
 
     socket.on("monitoring_update", (data) => {
@@ -52,7 +63,6 @@ const AdminSidebar = () => {
     fetchAllCounts();
 
     return () => socket.disconnect();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // 🔄 Chargement des compteurs
@@ -101,7 +111,6 @@ const AdminSidebar = () => {
     navigate("/login");
   };
 
-  // 🧭 Menu latéral
   const menuItems = [
     { name: "Dashboard", icon: <LayoutDashboard className="w-4 h-4" />, path: "/admin" },
     { name: "Trajets", icon: <Bus className="w-4 h-4" />, path: "/admin/trajets", badge: trajetCount, key: "trajets" },
@@ -126,10 +135,9 @@ const AdminSidebar = () => {
           <NavLink
             key={item.name}
             to={item.path}
-            // ✅ ESLint-friendly version : on définit isActive dans la fonction
-            className={(navData) =>
+            className={({ isActive }) =>
               `relative flex items-center justify-between px-4 py-2 rounded-lg font-medium transition ${
-                navData.isActive
+                isActive
                   ? "bg-primary text-white"
                   : "text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
               }`
@@ -180,9 +188,9 @@ const AdminSidebar = () => {
         {/* 🟢 Monitoring Live */}
         <NavLink
           to="/admin/live-monitor"
-          className={(navData) =>
+          className={({ isActive }) =>
             `flex items-center justify-between px-4 py-2 rounded-lg font-medium transition ${
-              navData.isActive
+              isActive
                 ? "bg-primary text-white"
                 : "text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
             }`
