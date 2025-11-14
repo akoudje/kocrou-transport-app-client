@@ -192,6 +192,7 @@ const checkUser = useCallback(async () => {
 }, []);
 
   useEffect(() => {
+    console.log("✅ AuthProvider monté");
     const interval = setInterval(() => {
       refreshAccessToken();
     }, 1000 * 60 * 5); // toutes les 5 minutes

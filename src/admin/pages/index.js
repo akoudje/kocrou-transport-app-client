@@ -1,0 +1,11 @@
+export { default as AdminDashboard } from "./AdminDashboard";
+export { default as AdminTrajets } from "./AdminTrajets";
+export { default as AdminReservations } from "./AdminReservations";
+export { default as AdminUsers } from "./AdminUsers";
+export { default as AdminTicketView } from "./AdminTicketView";
+export { default as AdminSettings } from "./AdminSettings";
+export { default as AdminLogs } from "./AdminLogs";
+export { default as AdminNotifications } from "./AdminNotifications";
+export { default as AdminReports } from "./AdminReports";
+export { default as AdminLiveMonitor } from "./AdminLiveMonitor";
+export { default as AdminActivity } from "./AdminActivity";

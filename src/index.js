@@ -27,11 +27,10 @@ if (typeof window !== "undefined" && "ResizeObserver" in window) {
         try {
           callback(entries, observer);
         } catch (err) {
+          console.error("💥 Erreur lors du montage de l'app :", err);
           console.warn("⚠️ ResizeObserver error ignoré :", err);
         }
       });
     }
   };
 }
-
-

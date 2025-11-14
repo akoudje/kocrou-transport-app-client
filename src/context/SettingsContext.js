@@ -76,6 +76,7 @@ export const SettingsProvider = ({ children }) => {
   // 4️⃣ Rafraîchissement
   // ===============================
   useEffect(() => {
+    console.log("✅ SettingsProvider monté");
     fetchSettings(true);
   }, []);
 
