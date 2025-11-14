@@ -31,7 +31,8 @@ const AdminSidebar = () => {
 
   useEffect(() => {
     const socket = io(
-      process.env.REACT_APP_API_BASE_URL || "https://kocrou-transport-app-server.onrender.com",
+      process.env.REACT_APP_API_BASE_URL ||
+        "https://kocrou-transport-app-server.onrender.com",
       { transports: ["websocket"] }
     );
 
@@ -67,13 +68,17 @@ const AdminSidebar = () => {
       const confirmedReservations = reservationsRes.data?.data || [];
       const newActiveReservations = confirmedReservations.length;
       const allUsers =
-        usersRes.data?.data || (Array.isArray(usersRes.data) ? usersRes.data : []);
+        usersRes.data?.data ||
+        (Array.isArray(usersRes.data) ? usersRes.data : []);
       const newUserCount = allUsers.length;
 
       if (newTrajetCount !== trajetCount)
         triggerLiveChange("trajets", newTrajetCount - trajetCount);
       if (newActiveReservations !== activeReservations)
-        triggerLiveChange("reservations", newActiveReservations - activeReservations);
+        triggerLiveChange(
+          "reservations",
+          newActiveReservations - activeReservations
+        );
       if (newUserCount !== userCount)
         triggerLiveChange("users", newUserCount - userCount);
 
@@ -98,15 +103,57 @@ const AdminSidebar = () => {
   };
 
   const menuItems = [
-    { name: "Dashboard", icon: <LayoutDashboard className="w-4 h-4" />, path: "/admin" },
-    { name: "Trajets", icon: <Bus className="w-4 h-4" />, path: "/admin/trajets", badge: trajetCount, key: "trajets" },
-    { name: "Réservations", icon: <CalendarDays className="w-4 h-4" />, path: "/admin/reservations", badge: activeReservations, key: "reservations" },
-    { name: "Utilisateurs", icon: <Users className="w-4 h-4" />, path: "/admin/utilisateurs", badge: userCount, key: "users" },
-    { name: "Notifications", icon: <Bell className="w-4 h-4" />, path: "/admin/notifications" },
-    { name: "Rapports", icon: <BarChart2 className="w-4 h-4" />, path: "/admin/reports" },
-    { name: "Logs", icon: <ClipboardList className="w-4 h-4" />, path: "/admin/logs" },
-    { name: "Historique d’activité", icon: <Activity className="w-5 h-5" />, path: "/admin/activity" },
-    { name: "Paramètres", icon: <Settings className="w-4 h-4" />, path: "/admin/settings" },
+    {
+      name: "Dashboard",
+      icon: <LayoutDashboard className="w-4 h-4" />,
+      path: "/admin",
+    },
+    {
+      name: "Trajets",
+      icon: <Bus className="w-4 h-4" />,
+      path: "/admin/trajets",
+      badge: trajetCount,
+      key: "trajets",
+    },
+    {
+      name: "Réservations",
+      icon: <CalendarDays className="w-4 h-4" />,
+      path: "/admin/reservations",
+      badge: activeReservations,
+      key: "reservations",
+    },
+    {
+      name: "Utilisateurs",
+      icon: <Users className="w-4 h-4" />,
+      path: "/admin/utilisateurs",
+      badge: userCount,
+      key: "users",
+    },
+    {
+      name: "Notifications",
+      icon: <Bell className="w-4 h-4" />,
+      path: "/admin/notifications",
+    },
+    {
+      name: "Rapports",
+      icon: <BarChart2 className="w-4 h-4" />,
+      path: "/admin/reports",
+    },
+    {
+      name: "Logs",
+      icon: <ClipboardList className="w-4 h-4" />,
+      path: "/admin/logs",
+    },
+    {
+      name: "Historique d’activité",
+      icon: <Activity className="w-5 h-5" />,
+      path: "/admin/activity",
+    },
+    {
+      name: "Paramètres",
+      icon: <Settings className="w-4 h-4" />,
+      path: "/admin/settings",
+    },
   ];
 
   return (
@@ -120,7 +167,11 @@ const AdminSidebar = () => {
       {/* 🧭 En-tête dynamique */}
       <div className="mb-10 flex items-center gap-2 text-2xl font-bold tracking-tight">
         {settings?.logo ? (
-          <img src={settings.logo} alt="Logo" className="w-10 h-10 object-contain" />
+          <img
+            src={settings.logo}
+            alt="Logo"
+            className="w-10 h-10 object-contain"
+          />
         ) : (
           <span>🚍</span>
         )}
@@ -133,25 +184,30 @@ const AdminSidebar = () => {
       <nav className="flex-1 space-y-2">
         {menuItems.map((item) => (
           <NavLink
-            key={item.name}
-            to={item.path}
+            to="/admin/live-monitor"
             className={({ isActive }) =>
-              `relative flex items-center justify-between px-4 py-2 rounded-lg font-medium transition ${
+              `flex items-center justify-between px-4 py-2 rounded-lg font-medium transition ${
                 isActive
-                  ? "text-white"
+                  ? "bg-primary text-white"
                   : "text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
               }`
             }
-            style={{
-              backgroundColor: isActive
-                ? settings?.couleurPrincipale || "#2563eb"
-                : "transparent",
-            }}
           >
-            <div className="flex items-center gap-3">
-              {item.icon}
-              <span>{item.name}</span>
+            <div className="flex items-center gap-2">
+              <Activity
+                className={`w-4 h-4 ${
+                  adminCount > 0
+                    ? "text-green-500 animate-pulse"
+                    : "text-gray-400"
+                }`}
+              />
+              <span>Monitoring Live</span>
             </div>
+            {adminCount > 0 && (
+              <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-green-500 text-white">
+                {adminCount}
+              </span>
+            )}
           </NavLink>
         ))}
       </nav>

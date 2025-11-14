@@ -9,6 +9,9 @@ import { Link, useNavigate } from "react-router-dom";
 const Header = () => {
   const { settings } = useContext(SettingsContext);
   const { user, logout } = useContext(AuthContext);
+  const isAdmin = user?.isAdmin; // ✅ Ajoute cette ligne juste après le useContext
+
+
   const navigate = useNavigate();
 
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
@@ -196,12 +199,7 @@ const Header = () => {
                 </Link>
               )}
               <a href="#destinations" className="hover:opacity-80">Destinations</a>
-              <a href="#contact" className="hover:opacity-80">Contact</a>
-              {isAdmin && (
-                <Link to="/admin" className="hover:opacity-80">
-                  Dashboard
-                </Link>
-              )}
+              <a href="#contact" className="hover:opacity-80">Contact</a>              
 
               {!user ? (
                 <button
