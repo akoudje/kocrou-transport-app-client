@@ -7,11 +7,12 @@ export const SettingsContext = createContext();
 export const SettingsProvider = ({ children }) => {
   const [settings, setSettings] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [showBanner, setShowBanner] = useState(false); // 🎨 Nouvelle bannière
 
-  /* =========================================================
-     🧩 1️⃣ Fonction principale de récupération
-     ========================================================= */
-  const fetchSettings = async () => {
+  // ===============================
+  // 1️⃣ Chargement initial
+  // ===============================
+  const fetchSettings = async (silent = false) => {
     try {
       setLoading(true);
       const { data } = await api.get("/settings");
@@ -19,8 +20,18 @@ export const SettingsProvider = ({ children }) => {
 
       if (!settingsData) throw new Error("Aucun paramètre système trouvé.");
 
+      // Comparer avec les précédents
+      const previousColor = settings?.couleurPrincipale;
+      const previousLogo = settings?.logo;
+
       setSettings(settingsData);
       applyTheme(settingsData);
+
+      // 🎨 Affiche la bannière uniquement si changement visuel
+      if (!silent && (previousColor !== settingsData.couleurPrincipale || previousLogo !== settingsData.logo)) {
+        triggerBanner();
+      }
+
       console.log("✅ Paramètres système chargés :", settingsData);
     } catch (err) {
       console.error("❌ Erreur lors du chargement des paramètres :", err);
@@ -29,31 +40,26 @@ export const SettingsProvider = ({ children }) => {
     }
   };
 
-  /* =========================================================
-     🎨 2️⃣ Application dynamique du thème
-     ========================================================= */
+  // ===============================
+  // 2️⃣ Application dynamique du thème
+  // ===============================
   const applyTheme = (data) => {
     if (!data) return;
     const root = document.documentElement;
 
-    // 🎨 Couleur principale
     if (data.couleurPrincipale) {
       root.style.setProperty("--color-primary", data.couleurPrincipale);
-      root.style.setProperty(
-        "--color-primary-hover",
-        darkenColor(data.couleurPrincipale, 0.15)
-      );
+      root.style.setProperty("--color-primary-hover", darkenColor(data.couleurPrincipale, 0.15));
     }
 
-    // 🖼️ Logo dynamique
     if (data.logo) {
       localStorage.setItem("app_logo", data.logo);
     }
   };
 
-  /* =========================================================
-     🌈 3️⃣ Fonction utilitaire : assombrir une couleur
-     ========================================================= */
+  // ===============================
+  // 3️⃣ Assombrir une couleur
+  // ===============================
   const darkenColor = (hex, amount = 0.2) => {
     try {
       const num = parseInt(hex.replace("#", ""), 16);
@@ -66,32 +72,39 @@ export const SettingsProvider = ({ children }) => {
     }
   };
 
-  /* =========================================================
-     🕓 4️⃣ Chargement initial + rafraîchissement périodique
-     ========================================================= */
+  // ===============================
+  // 4️⃣ Rafraîchissement
+  // ===============================
   useEffect(() => {
-    fetchSettings(); // 🔹 Au montage
+    fetchSettings(true);
   }, []);
 
-  // 🔁 Rafraîchissement automatique toutes les 60 secondes
   useEffect(() => {
-    const interval = setInterval(fetchSettings, 60000);
+    const interval = setInterval(() => fetchSettings(true), 60000);
     return () => clearInterval(interval);
   }, []);
 
-  /* =========================================================
-     ⚙️ 5️⃣ Fournir le contexte global
-     ========================================================= */
+  // ===============================
+  // 5️⃣ Bannière visuelle
+  // ===============================
+  const triggerBanner = () => {
+    setShowBanner(true);
+    setTimeout(() => setShowBanner(false), 2500);
+  };
+
+  // ===============================
+  // 6️⃣ Rendu du provider
+  // ===============================
   return (
-    <SettingsContext.Provider
-      value={{
-        settings,
-        loading,
-        fetchSettings,
-        setSettings,
-      }}
-    >
+    <SettingsContext.Provider value={{ settings, loading, fetchSettings, setSettings }}>
       {children}
+
+      {/* 🎨 Bannière flottante */}
+      {showBanner && (
+        <div className="fixed top-5 right-5 z-50 bg-green-600 text-white px-5 py-2 rounded-lg shadow-lg animate-fade-in-down">
+          🎨 Thème mis à jour !
+        </div>
+      )}
     </SettingsContext.Provider>
   );
 };
