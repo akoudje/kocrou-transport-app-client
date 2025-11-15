@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { AuthContext } from "../context/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
 import { SettingsContext } from "../context/SettingsContext";
-import logoBus from "src/assets/images/logobus.png";
+import logoBus from "../assets/images/logobus.png";
 
 const Header = () => {
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
