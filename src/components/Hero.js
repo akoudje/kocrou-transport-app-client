@@ -36,12 +36,11 @@ const Hero = () => {
         className="absolute inset-0 bg-cover bg-center"
         style={{
           backgroundImage:
-            "linear-gradient(rgba(13, 18, 27, 0.5), rgba(13, 18, 27, 0.8)), url('https://images.unsplash.com/photo-1509587584298-0f3b3de5a2d2?auto=format&fit=crop&w=1600&q=80')",
+            "url('https://images.unsplash.com/photo-1509587584298-0f3b3de5a2d2?auto=format&fit=crop&w=1600&q=80')",
         }}
       ></div>
 
       <div className="relative z-10 mx-auto w-full max-w-4xl px-4">
-
         {/* 🔹 Titre principal */}
         <h1 className="text-4xl md:text-6xl font-black text-white leading-tight drop-shadow-lg">
           Voyagez simplement, <br />
@@ -112,7 +111,7 @@ const Hero = () => {
             </label>
 
             {/* Champ passagers */}
-{/*             <label className="flex flex-col text-left">
+            {/*             <label className="flex flex-col text-left">
               <p className="pb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
                 Passagers
               </p>
