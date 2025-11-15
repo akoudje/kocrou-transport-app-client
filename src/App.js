@@ -11,6 +11,9 @@ import ReservationsPage from "./pages/ReservationsPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import ProtectedRoute from "./pages/ProtectedRoute";
+import ServerStatusBanner from "./components/ServerStatusBanner";
+
+
 
 // 🧑‍💼 Admin
 import AdminLogin from "./admin/pages/AdminLogin";
@@ -38,7 +41,8 @@ const App = () => (
       <Route path="/recherche" element={<SearchResults />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
-
+      <Route path="/serverstatusbanner" element={<ServerStatusBanner />} />
+      
       {/* 🔒 Utilisateur */}
       <Route path="/reservation/:id" element={<ProtectedRoute><BookingPage /></ProtectedRoute>} />
       <Route path="/confirmation" element={<ProtectedRoute><ConfirmationPage /></ProtectedRoute>} />
