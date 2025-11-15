@@ -12,8 +12,7 @@ const AdminLayout = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("adminToken");
-    if (token) smartApi.setAuthHeader(token); // ✅ Appliquer le token à smartApi
-     }, []);
+    if (token) smartApi.setAuthHeader(token);
 
     const verify = async () => {
       const result = await checkAdmin();
