@@ -35,8 +35,8 @@ const Hero = () => {
       <div
         className="absolute inset-0 bg-cover bg-center"
         style={{
-          backgroundImage:
-            "url('https://images.unsplash.com/photo-1509587584298-0f3b3de5a2d2?auto=format&fit=crop&w=1600&q=80')",
+          backgroundImage:          
+            "url('https://www.chi-athenaeum.org/assets/components/phpthumbof/cache/8044_4.49ec5f47011c8a46f651e6ad01428bb5.jpg')"
         }}
       ></div>
 
