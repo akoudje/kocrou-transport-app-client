@@ -35,7 +35,7 @@ const Header = () => {
             <img
               src={logoBus}
               alt="Logo Kocrou Transport"
-              className="h-auto w-[180px] object-contain"
+              className="h-auto w-[120px] object-contain"
             />
           </Link>
 
