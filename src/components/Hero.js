@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 import { SettingsContext } from "../context/SettingsContext";
 import backgroundImage from "../assets/images/busbg.jpg";
 
-
 const Hero = () => {
   const navigate = useNavigate();
   const { settings } = useContext(SettingsContext);
@@ -14,7 +13,6 @@ const Hero = () => {
     depart: "",
     arrivee: "",
     date: "",
-    passagers: "1",
   });
 
   const handleChange = (e) =>
@@ -110,25 +108,7 @@ const Hero = () => {
                 />
               </div>
             </label>
-
-            {/* Champ passagers */}
-            {/*             <label className="flex flex-col text-left">
-              <p className="pb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
-                Passagers
-              </p>
-              <div className="relative">
-                <Users className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                <input
-                  type="number"
-                  name="passagers"
-                  min="1"
-                  value={form.passagers}
-                  onChange={handleChange}
-                  className="w-full h-14 pl-10 pr-4 rounded-lg bg-subtle-light dark:bg-subtle-dark focus:ring-2 focus:ring-primary focus:outline-none"
-                />
-              </div>
-            </label> */}
-
+            
             {/* Bouton principal dynamique */}
             <button
               type="submit"
