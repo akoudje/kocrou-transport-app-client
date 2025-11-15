@@ -36,7 +36,7 @@ const Hero = () => {
         className="absolute inset-0 bg-cover bg-center"
         style={{
           backgroundImage:
-            "linear-gradient(rgba(13, 18, 27, 0.5), rgba(13, 18, 27, 0.8)), url('https://unsplash.com/fr/photos/autobus-gris-et-noir-stationne-pendant-la-journee-LR5O79shvro')",
+            "url('https://images.unsplash.com/photo-1509587584298-0f3b3de5a2d2?auto=format&fit=crop&w=1600&q=80')",
         }}
       ></div>
 
