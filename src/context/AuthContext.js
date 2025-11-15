@@ -1,4 +1,3 @@
-// client/src/context/AuthContext.js
 import React, { createContext, useState, useEffect, useCallback } from "react";
 import smartApi from "../utils/smartApi";
 import Swal from "sweetalert2";
@@ -30,18 +29,12 @@ export const AuthProvider = ({ children }) => {
     }
   }, [user, token, refreshToken]);
 
-  // ✅ Applique le token à Axios
+  // ✅ Applique le token à l’instance Axios active
   useEffect(() => {
-    if (token) {
-      smartApi.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-    } else {
-      delete smartApi.defaults.headers.common["Authorization"];
-    }
+    smartApi.setAuthHeader(token);
   }, [token]);
 
-  /* =========================================================
-     🆕 INSCRIPTION UTILISATEUR
-  ========================================================= */
+  /* 🆕 INSCRIPTION UTILISATEUR */
   const register = useCallback(async (name, email, password) => {
     setLoading(true);
     setError(null);
@@ -76,9 +69,7 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
-  /* =========================================================
-     🔐 CONNEXION UTILISATEUR
-  ========================================================= */
+  /* 🔐 CONNEXION UTILISATEUR */
   const login = useCallback(async (email, password) => {
     setLoading(true);
     setError(null);
@@ -116,9 +107,7 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
-  /* =========================================================
-     🚪 DÉCONNEXION
-  ========================================================= */
+  /* 🚪 DÉCONNEXION */
   const logout = useCallback(() => {
     setUser(null);
     setToken(null);
@@ -132,9 +121,7 @@ export const AuthProvider = ({ children }) => {
     });
   }, []);
 
-  /* =========================================================
-     ♻️ RAFRAÎCHISSEMENT DU TOKEN
-  ========================================================= */
+  /* ♻️ RAFRAÎCHISSEMENT DU TOKEN */
   const refreshAccessToken = useCallback(async () => {
     if (!refreshToken) return;
     try {
@@ -148,54 +135,50 @@ export const AuthProvider = ({ children }) => {
     }
   }, [refreshToken, logout]);
 
-  /* =========================================================
-     CHECK USER
-  ========================================================= */
-const checkUser = useCallback(async () => {
-  const token = localStorage.getItem("token");
-  if (!token) return false;
+  /* CHECK USER */
+  const checkUser = useCallback(async () => {
+    const token = localStorage.getItem("token");
+    if (!token) return false;
 
-  try {
-    const { data } = await smartApi.get("/auth/user", {
-      headers: { Authorization: `Bearer ${token}` },
-      withCredentials: true,
-    });
+    try {
+      const { data } = await smartApi.get("/auth/user", {
+        headers: { Authorization: `Bearer ${token}` },
+        withCredentials: true,
+      });
 
-    if (data?.user) {
-      setUser(data.user); // met à jour le contexte si besoin
-      return true;
+      if (data?.user) {
+        setUser(data.user);
+        return true;
+      }
+      return false;
+    } catch (err) {
+      console.warn("❌ Échec de la vérification utilisateur :", err);
+      return false;
     }
-    return false;
-  } catch (err) {
-    console.warn("❌ Échec de la vérification utilisateur :", err);
-    return false;
-  }
-}, []);
+  }, []);
 
-  /* =========================================================
-     CHECK ADMIN
-  ========================================================= */
+  /* CHECK ADMIN */
   const checkAdmin = useCallback(async () => {
-  const token = localStorage.getItem("adminToken");
-  if (!token) return false;
+    const token = localStorage.getItem("adminToken");
+    if (!token) return false;
 
-  try {
-    const { data } = await smartApi.get("/auth/user", {
-      headers: { Authorization: `Bearer ${token}` },
-      withCredentials: true,
-    });
-    return data?.isAdmin === true;
-  } catch (err) {
-    console.warn("❌ Échec de la vérification admin :", err);
-    return false;
-  }
-}, []);
+    try {
+      const { data } = await smartApi.get("/auth/user", {
+        headers: { Authorization: `Bearer ${token}` },
+        withCredentials: true,
+      });
+      return data?.isAdmin === true;
+    } catch (err) {
+      console.warn("❌ Échec de la vérification admin :", err);
+      return false;
+    }
+  }, []);
 
   useEffect(() => {
     console.log("✅ AuthProvider monté");
     const interval = setInterval(() => {
       refreshAccessToken();
-    }, 1000 * 60 * 5); // toutes les 5 minutes
+    }, 1000 * 60 * 5);
     return () => clearInterval(interval);
   }, [refreshAccessToken]);
 
@@ -207,12 +190,12 @@ const checkUser = useCallback(async () => {
         refreshToken,
         loading,
         error,
-        register, // ✅ ajouté
+        register,
         login,
         logout,
         isAuthenticated: !!user,
         checkUser,
-        checkAdmin, // ✅ ajouté ici
+        checkAdmin,
       }}
     >
       {children}
