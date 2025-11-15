@@ -4,7 +4,7 @@ import Hero from "../components/Hero";
 import Destinations from "../components/Destinations";
 import WhyChooseUs from "../components/WhyChooseUs";
 import Footer from "../components/Footer";
-import usePing from "./hooks/usePing";
+import usePing from "../hooks/usePing";
 
 const LandingPage = () => {
   const serverUp = usePing();
@@ -25,6 +25,7 @@ const LandingPage = () => {
         <Hero />
         <Destinations />
         <WhyChooseUs />
+        <Footer />
       </main>
       <footer className="text-center py-6 text-gray-500 dark:text-gray-400 text-sm border-t border-gray-200 dark:border-gray-700">
         © {new Date().getFullYear()} Kocrou Transport. Tous droits réservés.
