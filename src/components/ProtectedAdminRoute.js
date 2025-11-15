@@ -1,35 +1,8 @@
 // client/src/routes/ProtectedAdminRoute.js
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Navigate } from "react-router-dom";
-import smartApi from "../utils/smartApi"; // ✅ Utilisation du wrapper
-
-/* const ProtectedAdminRoute = ({ children }) => {
-  const [isValid, setIsValid] = useState(null);
-
-  useEffect(() => {
-    const token = localStorage.getItem("adminToken");
-    if (!token) return setIsValid(false);
-
-    smartApi
-      .get("/auth/user", {
-        headers: { Authorization: `Bearer ${token}` },
-        withCredentials: true,
-      })
-      .then((res) => {
-        if (res.data?.isAdmin) {
-          setIsValid(true);
-        } else {
-          setIsValid(false);
-        }
-      })
-      .catch(() => setIsValid(false));
-  }, []);
-
-  if (isValid === null) return null; // ou spinner
-  if (!isValid) return <Navigate to="/admin-login" replace />;
-  return children;
-}; */
-
+import { AuthContext } from "../context/AuthContext"; // ✅ Ajouté
+import smartApi from "../utils/smartApi";
 
 const ProtectedAdminRoute = ({ children }) => {
   const [isValid, setIsValid] = useState(null);
