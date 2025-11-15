@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { AuthContext } from "../context/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
 import { SettingsContext } from "../context/SettingsContext";
+import logoBus from 'src/assets/images/logobus.png';
 
 const Header = () => {
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
@@ -29,7 +30,15 @@ const Header = () => {
     >
       <div className="container mx-auto px-4">
         <div className="flex h-20 items-center justify-between border-b border-subtle-light dark:border-subtle-dark">
-        
+          {/* 🔹 Logo */}
+          <Link to="/" className="flex items-center gap-3 text-primary">
+            <img
+              src={logoBus}
+              alt="Logo Kocrou Transport"
+              className="w-7 h-7 object-contain"
+            />
+          </Link>
+
           {/* 🔹 Logo dynamique */}
           {settings?.logo && (
             <img
@@ -38,7 +47,6 @@ const Header = () => {
               className="mx-auto mb-6 w-24 h-24 object-contain rounded-md"
             />
           )}
-
 
           {/* Navigation */}
           <nav className="hidden md:flex items-center gap-9">

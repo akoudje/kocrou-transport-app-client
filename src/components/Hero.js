@@ -112,7 +112,7 @@ const Hero = () => {
             </label>
 
             {/* Champ passagers */}
-            <label className="flex flex-col text-left">
+{/*             <label className="flex flex-col text-left">
               <p className="pb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
                 Passagers
               </p>
@@ -127,7 +127,7 @@ const Hero = () => {
                   className="w-full h-14 pl-10 pr-4 rounded-lg bg-subtle-light dark:bg-subtle-dark focus:ring-2 focus:ring-primary focus:outline-none"
                 />
               </div>
-            </label>
+            </label> */}
 
             {/* Bouton principal dynamique */}
             <button
