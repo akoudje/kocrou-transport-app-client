@@ -36,7 +36,7 @@ const Hero = () => {
         className="absolute inset-0 bg-cover bg-center"
         style={{
           backgroundImage:
-            "linear-gradient(rgba(13, 18, 27, 0.35), rgba(13, 18, 27, 0.23)), url('https://images.unsplash.com/photo-1509587584298-0f3b3de5a2d2?auto=format&fit=crop&w=1600&q=80')",
+            "linear-gradient(rgba(218, 219, 219, 0.76), rgba(139, 180, 255, 0.59)), url('https://images.unsplash.com/photo-1509587584298-0f3b3de5a2d2?auto=format&fit=crop&w=1600&q=80')",
         }}
       ></div>
 
