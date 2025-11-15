@@ -41,14 +41,6 @@ const Hero = () => {
       ></div>
 
       <div className="relative z-10 mx-auto w-full max-w-4xl px-4">
-        {/* 🔹 Logo dynamique */}
-        {settings?.logo && (
-          <img
-            src={settings.logo}
-            alt="Logo"
-            className="mx-auto mb-6 w-24 h-24 object-contain rounded-md"
-          />
-        )}
 
         {/* 🔹 Titre principal */}
         <h1 className="text-4xl md:text-6xl font-black text-white leading-tight drop-shadow-lg">

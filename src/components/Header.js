@@ -3,6 +3,7 @@ import { Bus, Menu, Sun, Moon, LogOut, User } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { AuthContext } from "../context/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
+import { SettingsContext } from "../context/SettingsContext";
 
 const Header = () => {
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
@@ -10,6 +11,7 @@ const Header = () => {
   const [accountMenuOpen, setAccountMenuOpen] = useState(false);
   const { user, logout } = useContext(AuthContext);
   const navigate = useNavigate();
+  const { settings } = useContext(SettingsContext);
 
   useEffect(() => {
     document.documentElement.classList.toggle("dark", theme === "dark");
@@ -27,25 +29,45 @@ const Header = () => {
     >
       <div className="container mx-auto px-4">
         <div className="flex h-20 items-center justify-between border-b border-subtle-light dark:border-subtle-dark">
-          {/* Logo */}
-          <Link to="/" className="flex items-center gap-3 text-primary">
-            <Bus className="w-7 h-7" />
-            <h2 className="text-xl font-bold tracking-tight text-text-light dark:text-text-dark">
-              Kocrou Transport
-            </h2>
-          </Link>
+        
+          {/* 🔹 Logo dynamique */}
+          {settings?.logo && (
+            <img
+              src={settings.logo}
+              alt="Logo"
+              className="mx-auto mb-6 w-24 h-24 object-contain rounded-md"
+            />
+          )}
+
 
           {/* Navigation */}
           <nav className="hidden md:flex items-center gap-9">
-            <a href="#hero" className="text-sm font-medium hover:text-primary transition">Accueil</a>
+            <a
+              href="#hero"
+              className="text-sm font-medium hover:text-primary transition"
+            >
+              Accueil
+            </a>
             {user && (
-              <Link to="/mes-reservations" className="text-sm font-medium hover:text-primary transition">
+              <Link
+                to="/mes-reservations"
+                className="text-sm font-medium hover:text-primary transition"
+              >
                 Mes Réservations
               </Link>
             )}
-            <a href="#destinations" className="text-sm font-medium hover:text-primary transition">Destinations</a>
-            <a href="#contact" className="text-sm font-medium hover:text-primary transition">Contact</a>
-           
+            <a
+              href="#destinations"
+              className="text-sm font-medium hover:text-primary transition"
+            >
+              Destinations
+            </a>
+            <a
+              href="#contact"
+              className="text-sm font-medium hover:text-primary transition"
+            >
+              Contact
+            </a>
           </nav>
 
           {/* Actions */}
@@ -129,10 +151,20 @@ const Header = () => {
             className="md:hidden bg-background-light dark:bg-background-dark border-t border-subtle-light dark:border-subtle-dark"
           >
             <div className="flex flex-col p-4 space-y-3">
-              <a href="#hero" className="hover:text-primary">Accueil</a>
-              {user && <Link to="/mes-reservations" className="hover:text-primary">Mes Réservations</Link>}
-              <a href="#destinations" className="hover:text-primary">Destinations</a>
-              <a href="#contact" className="hover:text-primary">Contact</a>
+              <a href="#hero" className="hover:text-primary">
+                Accueil
+              </a>
+              {user && (
+                <Link to="/mes-reservations" className="hover:text-primary">
+                  Mes Réservations
+                </Link>
+              )}
+              <a href="#destinations" className="hover:text-primary">
+                Destinations
+              </a>
+              <a href="#contact" className="hover:text-primary">
+                Contact
+              </a>
               {!user ? (
                 <button
                   onClick={() => navigate("/login")}
@@ -157,5 +189,3 @@ const Header = () => {
 };
 
 export default Header;
-
-
