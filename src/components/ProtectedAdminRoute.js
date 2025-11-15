@@ -1,13 +1,20 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Navigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
+import usePing from "../hooks/usePing";
 
 const ProtectedAdminRoute = ({ children }) => {
   const [isValid, setIsValid] = useState(null);
   const [error, setError] = useState(false);
   const { checkAdmin } = useContext(AuthContext);
+  const serverUp = usePing();
 
   useEffect(() => {
+    const token = localStorage.getItem("adminToken");
+    if (token) smartApi.setAuthHeader(token);
+
+    if (!serverUp) return; // ⛔ Ne lance pas checkAdmin si le serveur est KO
+
     let isMounted = true;
 
     const verify = async () => {
@@ -27,10 +34,23 @@ const ProtectedAdminRoute = ({ children }) => {
     return () => {
       isMounted = false;
     };
-  }, [checkAdmin]);
+  }, [checkAdmin, serverUp]);
+
+  if (!serverUp) {
+    return (
+      <div style={{ textAlign: "center", padding: "2rem", color: "red" }}>
+        ❌ Le serveur est temporairement injoignable. Veuillez réessayer plus
+        tard.
+      </div>
+    );
+  }
 
   if (isValid === null && !error) {
-    return <div style={{ textAlign: "center", padding: "2rem" }}>🔄 Vérification admin...</div>;
+    return (
+      <div style={{ textAlign: "center", padding: "2rem" }}>
+        🔄 Vérification admin...
+      </div>
+    );
   }
 
   if (error || !isValid) {
