@@ -17,9 +17,6 @@ import { message, Tag } from "antd";
 import smartApi from "../../utils/smartApi";
 import { io } from "socket.io-client";
 
-
-
-
 const AdminDashboard = () => {
   const [stats, setStats] = useState({
     users: 0,
