@@ -2,6 +2,8 @@ import React, { useEffect, useState, useContext } from "react";
 import { Navigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import usePing from "../hooks/usePing";
+import smartApi from "../utils/smartApi";
+
 
 const ProtectedAdminRoute = ({ children }) => {
   const [isValid, setIsValid] = useState(null);
