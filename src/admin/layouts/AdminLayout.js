@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import AdminSidebar from "../components/AdminSidebar";
 import AdminHeader from "../components/AdminHeader";
-import { AuthContext } from "../context/AuthContext";
+import { AuthContext } from "../../context/AuthContext";
 
 const AdminLayout = () => {
   const { checkAdmin } = useContext(AuthContext);
