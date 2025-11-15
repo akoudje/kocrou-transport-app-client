@@ -12,7 +12,7 @@ const AdminActivity = () => {
   const [loading, setLoading] = useState(true);
   const [tokenValid, setTokenValid] = useState(true);
 
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("admintoken");
 
   /**
    * 🧠 Fonction de rafraîchissement du token silencieux

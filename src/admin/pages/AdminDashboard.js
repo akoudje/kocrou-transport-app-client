@@ -36,7 +36,7 @@ const AdminDashboard = () => {
 
   const refreshIntervalRef = useRef(null);
   const COLORS = ["#2563eb", "#10b981", "#f59e0b", "#ef4444", "#8b5cf6"];
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("admintoken");
 
   // ======================================================
   // 📊 Chargement des statistiques globales

@@ -25,7 +25,7 @@ const AdminUsers = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("admintoken");
 
   // ✅ Charger tous les utilisateurs
   const fetchUsers = async () => {

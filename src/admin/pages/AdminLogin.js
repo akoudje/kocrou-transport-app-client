@@ -16,7 +16,8 @@ const AdminLogin = () => {
     if (adminUser?.isAdmin) navigate("/admin/");
   }, [navigate]);
 
-  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+  const handleChange = (e) =>
+    setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -40,6 +41,7 @@ const AdminLogin = () => {
       localStorage.setItem("adminToken", data.token);
       localStorage.setItem("adminRefreshToken", data.refreshToken);
       localStorage.setItem("adminUser", JSON.stringify(data.user));
+      smartApi.setAuthHeader(data.token); // 🔐 Appliquer le token à l’instance
 
       Swal.fire({
         icon: "success",
@@ -50,12 +52,16 @@ const AdminLogin = () => {
       });
 
       navigate("/admin/");
+
+      navigate("/admin/");
     } catch (err) {
       console.error("Erreur de connexion admin :", err);
       Swal.fire({
         icon: "error",
         title: "Erreur de connexion",
-        text: err.response?.data?.message || "Identifiants incorrects ou serveur injoignable.",
+        text:
+          err.response?.data?.message ||
+          "Identifiants incorrects ou serveur injoignable.",
         confirmButtonColor: "#2563eb",
       });
     } finally {

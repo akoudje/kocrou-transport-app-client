@@ -3,6 +3,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 import AdminSidebar from "../components/AdminSidebar";
 import AdminHeader from "../components/AdminHeader";
 import { AuthContext } from "../../context/AuthContext";
+import smartApi from "../../utils/smartApi";
 
 const AdminLayout = () => {
   const { checkAdmin } = useContext(AuthContext);
@@ -10,25 +11,17 @@ const AdminLayout = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    let isMounted = true;
+    const token = localStorage.getItem("adminToken");
+    if (token) smartApi.setAuthHeader(token); // ✅ Appliquer le token à smartApi
+     }, []);
 
     const verify = async () => {
-      try {
-        const result = await checkAdmin();
-        if (isMounted) {
-          if (!result) navigate("/admin-login");
-          else setIsValid(true);
-        }
-      } catch (err) {
-        console.warn("❌ Erreur dans AdminLayout :", err);
-        if (isMounted) navigate("/admin-login");
-      }
+      const result = await checkAdmin();
+      if (!result) navigate("/admin-login");
+      else setIsValid(true);
     };
 
     verify();
-    return () => {
-      isMounted = false;
-    };
   }, [checkAdmin, navigate]);
 
   if (!isValid) {

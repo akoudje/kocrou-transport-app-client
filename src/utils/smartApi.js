@@ -19,7 +19,7 @@ const smartApi = {
   delete: (...args) => (isAdminContext() ? adminApi.delete(...args) : userApi.delete(...args)),
   patch: (...args) => (isAdminContext() ? adminApi.patch(...args) : userApi.patch(...args)),
 
-  /* ✅ Injecte dynamiquement le token dans l’instance active */
+   /* ✅ Injecte dynamiquement le token */
   setAuthHeader: (token) => {
     const instance = isAdminContext() ? adminApi : userApi;
     if (token && instance?.defaults?.headers?.common) {
@@ -29,8 +29,9 @@ const smartApi = {
     }
   },
 
-  /* ✅ Accès direct à l’instance Axios active */
+  /* ✅ Accès direct à l’instance active */
   getActiveInstance: () => (isAdminContext() ? adminApi : userApi),
 };
 
 export default smartApi;
+

@@ -13,7 +13,7 @@ const SOCKET_URL =
 const AdminNotifications = () => {
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("admintoken");
 
   // 🧠 Charger les notifications existantes
   const fetchNotifications = async () => {

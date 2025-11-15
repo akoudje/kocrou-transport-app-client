@@ -9,7 +9,7 @@ const AdminLogs = () => {
   const [logs, setLogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("all");
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("admintoken");
 
   // 🔹 Charger les logs (avec gestion d'erreur robuste)
   const fetchLogs = async () => {

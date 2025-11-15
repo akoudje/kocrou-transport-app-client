@@ -31,7 +31,7 @@ const AdminReports = () => {
   const [reportData, setReportData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [monthFilter, setMonthFilter] = useState("");
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("admintoken");
 
   // 🎯 Charger les données du backend (robuste : accepte data.data ou data)
   const fetchReport = async () => {

@@ -18,7 +18,7 @@ import { useNavigate } from "react-router-dom";
 
 const AdminReservations = () => {
   const navigate = useNavigate();
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("admintoken");
 
   // 🔹 États principaux
   const [reservations, setReservations] = useState([]);

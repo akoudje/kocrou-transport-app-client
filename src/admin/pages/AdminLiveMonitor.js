@@ -21,7 +21,7 @@ const AdminLiveMonitor = () => {
   const [connectedCount, setConnectedCount] = useState(0);
   const [activityData, setActivityData] = useState([]);
   const dataRef = useRef([]);
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("admintoken");
 
   useEffect(() => {
     const socket = io(smartApi.defaults.baseURL, {

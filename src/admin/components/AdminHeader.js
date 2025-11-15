@@ -3,9 +3,9 @@ import { Sun, Moon, UserCircle2, Clock } from "lucide-react";
 
 const AdminHeader = ({ title, lastUpdated, onRefresh, loading }) => {
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
-  const user = JSON.parse(localStorage.getItem("user")) || {};
+  const user = JSON.parse(localStorage.getItem("adminUser")) || {};
 
-  useEffect(() => {
+   useEffect(() => {
     document.documentElement.classList.toggle("dark", theme === "dark");
     localStorage.setItem("theme", theme);
   }, [theme]);

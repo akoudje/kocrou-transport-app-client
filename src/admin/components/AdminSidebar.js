@@ -2,18 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 import { NavLink, useNavigate } from "react-router-dom";
-import {
-  LayoutDashboard,
-  Bus,
-  CalendarDays,
-  Users,
-  LogOut,
-  Settings,
-  Activity,
-  Bell,
-  BarChart2,
-  ClipboardList,
-} from "lucide-react";
+import {LayoutDashboard, Bus,CalendarDays,Users, LogOut,Settings,Activity, Bell,BarChart2, ClipboardList} from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import smartApi from "../../utils/smartApi";
 
@@ -27,9 +16,16 @@ const AdminSidebar = () => {
   const [socketConnected, setSocketConnected] = useState(false);
   const [liveChange, setLiveChange] = useState({ field: "", delta: 0 });
 
+
+  //✅ Appliquer le token admin à smartApi
+  useEffect(() => {
+    const token = localStorage.getItem("adminToken");
+    if (token) smartApi.setAuthHeader(token);
+  }, []);
+
   // ⚡ Connexion Socket.io avec AUTH TOKEN
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("admintoken");
 
     const socket = io(smartApi.defaults.baseURL, {
       transports: ["websocket"],
