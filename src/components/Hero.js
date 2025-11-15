@@ -3,6 +3,8 @@ import React, { useState, useContext } from "react";
 import { MapPin, Calendar, Users, Map } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { SettingsContext } from "../context/SettingsContext";
+import backgroundImage from "../assets/images/busbg.jpg";
+
 
 const Hero = () => {
   const navigate = useNavigate();
@@ -35,8 +37,7 @@ const Hero = () => {
       <div
         className="absolute inset-0 bg-cover bg-center"
         style={{
-          backgroundImage:          
-            "url('https://www.chi-athenaeum.org/assets/components/phpthumbof/cache/8044_4.49ec5f47011c8a46f651e6ad01428bb5.jpg')"
+          backgroundImage: `url(${backgroundImage})`,
         }}
       ></div>
 
