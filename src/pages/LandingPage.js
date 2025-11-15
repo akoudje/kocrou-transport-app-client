@@ -4,20 +4,22 @@ import Hero from "../components/Hero";
 import Destinations from "../components/Destinations";
 import WhyChooseUs from "../components/WhyChooseUs";
 import Footer from "../components/Footer";
+import usePing from "./hooks/usePing";
 
 const LandingPage = () => {
-  return (
-/*     <div className="bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark font-display">
-      <Header />
-      <main>
-        <Hero />
-        <Destinations />
-        <WhyChooseUs />
-      </main>
-      <Footer />
-    </div> */
+  const serverUp = usePing();
 
- <div className="min-h-screen flex flex-col bg-background-light dark:bg-background-dark transition-colors duration-300">
+  if (!serverUp) {
+    return (
+      <div className="p-10 text-center text-red-500">
+        ❌ Serveur injoignable. Veuillez vérifier votre connexion ou réessayer
+        plus tard.
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen flex flex-col bg-background-light dark:bg-background-dark transition-colors duration-300">
       <Header />
       <main className="flex-grow">
         <Hero />
@@ -32,4 +34,3 @@ const LandingPage = () => {
 };
 
 export default LandingPage;
-
