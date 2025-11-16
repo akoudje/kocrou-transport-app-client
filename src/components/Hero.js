@@ -57,7 +57,7 @@ const Hero = () => {
         >
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:items-end">
             {/* Champ départ */}
-            <label className="flex flex-col text-left lg:col-span-2">
+            <label className="flex flex-col text-left lg:col-span-1">
               <p className="pb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
                 Départ
               </p>
@@ -75,7 +75,7 @@ const Hero = () => {
             </label>
 
             {/* Champ arrivée */}
-            <label className="flex flex-col text-left lg:col-span-2">
+            <label className="flex flex-col text-left lg:col-span-1">
               <p className="pb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
                 Destination
               </p>
@@ -93,7 +93,7 @@ const Hero = () => {
             </label>
 
             {/* Champ date */}
-            <label className="flex flex-col text-left lg:col-span-2">
+            <label className="flex flex-col text-left lg:col-span-1">
               <p className="pb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
                 Date de départ
               </p>
