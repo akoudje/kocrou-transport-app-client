@@ -53,7 +53,7 @@ const Hero = () => {
         {/* 🔹 Formulaire de recherche */}
         <form
           onSubmit={handleSubmit}
-          className="mt-36 rounded-xl bg-white/90 dark:bg-card-dark/90 backdrop-blur-md p-4 sm:p-6 shadow-2xl"
+          className="mt-32 rounded-xl bg-white/90 dark:bg-card-dark/90 backdrop-blur-md p-4 sm:p-6 shadow-2xl"
         >
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:items-end">
             {/* Champ départ */}
