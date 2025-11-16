@@ -29,7 +29,7 @@ const Hero = () => {
   return (
     <section
       id="hero"
-      className="relative flex min-h-[560px] items-center justify-center py-16 text-center overflow-hidden"
+      className="relative flex min-h-[960px] items-center justify-center py-16 text-center overflow-hidden"
     >
       {/* 🔹 Image de fond */}
       <div
@@ -53,11 +53,11 @@ const Hero = () => {
         {/* 🔹 Formulaire de recherche */}
         <form
           onSubmit={handleSubmit}
-          className="mt-10 rounded-xl bg-white/90 dark:bg-card-dark/90 backdrop-blur-md p-4 sm:p-6 shadow-2xl"
+          className="mt-20 rounded-xl bg-white/90 dark:bg-card-dark/90 backdrop-blur-md p-4 sm:p-6 shadow-2xl"
         >
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5 lg:items-end">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:items-end">
             {/* Champ départ */}
-            <label className="flex flex-col text-left">
+            <label className="flex flex-col text-left lg:col-span-2">
               <p className="pb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
                 Départ
               </p>
@@ -75,7 +75,7 @@ const Hero = () => {
             </label>
 
             {/* Champ arrivée */}
-            <label className="flex flex-col text-left">
+            <label className="flex flex-col text-left lg:col-span-2">
               <p className="pb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
                 Destination
               </p>
@@ -93,7 +93,7 @@ const Hero = () => {
             </label>
 
             {/* Champ date */}
-            <label className="flex flex-col text-left">
+            <label className="flex flex-col text-left lg:col-span-2">
               <p className="pb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
                 Date de départ
               </p>
@@ -108,7 +108,7 @@ const Hero = () => {
                 />
               </div>
             </label>
-            
+
             {/* Bouton principal dynamique */}
             <button
               type="submit"
