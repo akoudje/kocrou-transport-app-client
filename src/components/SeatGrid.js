@@ -137,13 +137,7 @@ const SeatGrid = ({
                    gap-3 sm:gap-4 justify-items-center relative mx-auto"
         style={{ maxWidth: 550 }}
       >
-        {/* Allée centrale */}
-        <div
-          className="absolute left-[44%] sm:left-[45%] transform -translate-x-1/2
-                     w-10 sm:w-12 h-full bg-gradient-to-b from-gray-200/70 to-gray-300/40
-                     rounded-md shadow-inner pointer-events-none"
-        />
-
+       
         {Array.from({ length: totalRows }).map((_, rowIdx) => {
           const s1 = seatNumberAt(rowIdx, 0);
           const s2 = seatNumberAt(rowIdx, 1);
@@ -155,7 +149,6 @@ const SeatGrid = ({
             <React.Fragment key={`row-${rowIdx}`}>
               <SeatButton seatNumber={s1} />
               <SeatButton seatNumber={s2} />
-              <div className="w-10 sm:w-12" />
               <SeatButton seatNumber={s3} />
               <SeatButton seatNumber={s4} />
               <SeatButton seatNumber={s5} />
