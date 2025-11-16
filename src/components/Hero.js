@@ -29,7 +29,7 @@ const Hero = () => {
   return (
     <section
       id="hero"
-      className="relative flex min-h-[760px] items-center justify-center py-16 text-center overflow-hidden"
+      className="relative flex min-h-[660px] items-center justify-center py-16 text-center overflow-hidden"
     >
       {/* 🔹 Image de fond */}
       <div
