@@ -52,8 +52,6 @@ const AdminLogin = () => {
       });
 
       navigate("/admin/");
-
-      navigate("/admin/");
     } catch (err) {
       console.error("Erreur de connexion admin :", err);
       Swal.fire({

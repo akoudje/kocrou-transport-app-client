@@ -4,7 +4,6 @@ import { AuthContext } from "../context/AuthContext";
 import usePing from "../hooks/usePing";
 import smartApi from "../utils/smartApi";
 
-
 const ProtectedAdminRoute = ({ children }) => {
   const [isValid, setIsValid] = useState(null);
   const [error, setError] = useState(false);
