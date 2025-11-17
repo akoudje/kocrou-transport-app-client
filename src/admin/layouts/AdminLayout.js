@@ -5,13 +5,11 @@ import AdminHeader from "../components/AdminHeader";
 import { AuthContext } from "../../context/AuthContext";
 import smartApi from "../../utils/smartApi";
 import usePing from "../../hooks/usePing";
-
 const AdminLayout = () => {
   const { checkAdmin } = useContext(AuthContext);
   const [isValid, setIsValid] = useState(null);
   const navigate = useNavigate();
   const serverUp = usePing();
-
   useEffect(() => {
     const token = localStorage.getItem("adminToken");
     if (token) smartApi.setAuthHeader(token);
@@ -23,10 +21,8 @@ const AdminLayout = () => {
       if (!result) navigate("/admin-login");
       else setIsValid(true);
     };
-
     verify();
   }, [checkAdmin, navigate]);
-
   if (!serverUp) {
     return (
       <div className="p-10 text-center text-red-500">
@@ -35,7 +31,6 @@ const AdminLayout = () => {
       </div>
     );
   }
-
   if (!isValid) {
     return (
       <div className="p-10 text-center text-gray-500">
@@ -43,7 +38,6 @@ const AdminLayout = () => {
       </div>
     );
   }
-
   return (
     <div className="flex min-h-screen bg-gray-50 dark:bg-background-dark">
       <AdminSidebar />
@@ -56,5 +50,4 @@ const AdminLayout = () => {
     </div>
   );
 };
-
 export default AdminLayout;

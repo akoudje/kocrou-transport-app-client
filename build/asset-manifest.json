@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "./static/css/main.540e5903.css",
+    "main.js": "./static/js/main.bcd39c8c.js",
+    "static/js/977.a02ce214.chunk.js": "./static/js/977.a02ce214.chunk.js",
+    "static/js/667.845c2307.chunk.js": "./static/js/667.845c2307.chunk.js",
+    "static/media/Korhogo.jpg": "./static/media/Korhogo.a0525d1e4c6caa1e762b.jpg",
+    "static/media/Bouake.jpg": "./static/media/Bouake.4b3ba769f41802c11c91.jpg",
+    "static/media/busbg.jpg": "./static/media/busbg.6f892ba6d68114f13c50.jpg",
+    "static/media/San-Pedro.jpg": "./static/media/San-Pedro.a0c089b1f8eece966b35.jpg",
+    "static/media/Yamoussoukro.jpg": "./static/media/Yamoussoukro.4eac07f9eb154fce2d12.jpg",
+    "static/media/logobus.png": "./static/media/logobus.3339e97e997849a09624.png",
+    "index.html": "./index.html",
+    "main.540e5903.css.map": "./static/css/main.540e5903.css.map",
+    "main.bcd39c8c.js.map": "./static/js/main.bcd39c8c.js.map",
+    "977.a02ce214.chunk.js.map": "./static/js/977.a02ce214.chunk.js.map",
+    "667.845c2307.chunk.js.map": "./static/js/667.845c2307.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.540e5903.css",
+    "static/js/main.bcd39c8c.js"
+  ]
+}
